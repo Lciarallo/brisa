@@ -43,7 +43,7 @@ Why not SmartThings directly? Since early 2025, new SmartThings personal tokens 
 
 ### From extensions.gnome.org
 
-*Pending review.* Once it is approved, install it with the **Extension Manager** app or from the website.
+*Coming soon.* Brisa has not been submitted yet. Once it is listed, you will be able to install it from the website or the **Extension Manager** app.
 
 ### From source
 

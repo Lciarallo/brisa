@@ -9,24 +9,38 @@
 <meta property="og:description" content="Power, temperature, modes, fan, swing, timers and sensors, with a live animation. LG ThinQ and Home Assistant. GPL-3.0.">
 <meta property="og:image" content="https://lciarallo.github.io/brisa/assets/screenshots/hero.png">
 <meta property="og:type" content="website">
+<meta name="color-scheme" content="light dark">
 <link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preload" href="assets/fonts/Cantarell-VF.otf" as="font" type="font/otf" crossorigin>
 <style>
+/* Cantarell (SIL OFL 1.1, see assets/fonts/Cantarell-OFL.txt), self-hosted: no third-party requests. */
+@font-face {
+  font-family: "Cantarell";
+  src: url("assets/fonts/Cantarell-VF.otf") format("opentype");
+  font-weight: 100 800;
+  font-display: swap;
+}
 :root {
   --bg: #f6f8fb;
   --surface: #ffffff;
   --surface-2: #eef2f8;
   --text: #1d2433;
-  --muted: #5b667a;
+  --muted: #535e72;
   --border: #dde3ec;
-  --accent: #3584e4;
-  --accent-2: #26a1a8;
-  --cool: #62a0ea;
-  --heat: #ff7800;
-  --dry: #33c7de;
-  --auto: #57e389;
+  --accent: #3584e4;        /* decorative: icons, tracks, rules */
+  --accent-ink: #1a5fb4;    /* text and filled buttons: ≥ 6:1 with white */
+  --link: #1a5fb4;
+  --tint: #e3edfb;
+  --focus: #1a5fb4;
+  --shadow: 0 18px 40px -12px rgba(20, 30, 50, .35);
+  /* Shell-like demo, dark in both themes like GNOME's Quick Settings */
   --shell: #2b2b2f;
   --shell-2: #3a3a40;
+  --shell-3: #55555c;
   --shell-text: #f2f2f2;
+  --shell-muted: #c9c9cf;
+  --shell-on: #3584e4;
+  --shell-selected: #1a5fb4;
   --radius: 18px;
 }
 @media (prefers-color-scheme: dark) {
@@ -35,229 +49,295 @@
     --surface: #1d2128;
     --surface-2: #252a33;
     --text: #e9edf3;
-    --muted: #9aa5b5;
+    --muted: #a3adbd;
     --border: #2e3440;
+    --link: #8cbcf3;
+    --tint: #1d2c42;
+    --focus: #8cbcf3;
+    --shadow: 0 18px 40px -12px rgba(0, 0, 0, .7);
   }
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { accent-color: var(--accent-ink); scrollbar-color: var(--border) var(--bg); }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font: 16px/1.6 "Cantarell", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font: 17px/1.6 "Cantarell", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
 }
-a { color: var(--accent); }
+::selection { background: color-mix(in srgb, var(--accent) 35%, transparent); }
+a { color: var(--link); text-underline-offset: .2em; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 6px; }
+.skip {
+  position: absolute; left: 12px; top: -60px; z-index: 20;
+  background: var(--accent-ink); color: #fff; padding: 10px 16px; border-radius: 10px; font-weight: 700;
+}
+.skip:focus { top: 10px; }
 .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* Navigation */
 nav {
   position: sticky; top: 0; z-index: 10;
-  background: color-mix(in srgb, var(--bg) 85%, transparent);
-  backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
   border-bottom: 1px solid var(--border);
 }
-nav .wrap { display: flex; align-items: center; gap: 12px; height: 60px; }
-nav .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.15rem; text-decoration: none; color: var(--text); }
-nav .brand img { width: 30px; height: 30px; }
-nav .links { margin-left: auto; display: flex; gap: 18px; align-items: center; }
-nav .links a { color: var(--muted); text-decoration: none; font-weight: 600; font-size: .95rem; }
-nav .links a:hover { color: var(--text); }
-.lang { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 99px; padding: 4px 12px; font: inherit; font-size: .85rem; font-weight: 700; cursor: pointer; }
-@media (max-width: 640px) { nav .links a.hide-sm { display: none; } }
+nav .wrap { display: flex; align-items: center; gap: 8px; min-height: 60px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.15rem; text-decoration: none; color: var(--text); min-height: 44px; }
+.brand img { width: 30px; height: 30px; }
+.links { margin-left: auto; display: flex; align-items: center; }
+.links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; color: var(--muted); text-decoration: none; font-weight: 700; font-size: .95rem; border-radius: 10px; }
+.links a:hover { color: var(--text); background: var(--surface-2); }
+.lang { min-width: 44px; min-height: 44px; margin-left: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 99px; font: inherit; font-size: .85rem; font-weight: 800; cursor: pointer; }
+.lang:hover { background: var(--surface-2); }
+@media (max-width: 640px) { .links a.hide-sm { display: none; } }
 
-.hero { padding: 64px 0 40px; }
-.hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
-@media (max-width: 880px) { .hero .wrap { grid-template-columns: 1fr; } }
-.eyebrow { display: inline-block; font-weight: 700; font-size: .85rem; color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); padding: 4px 12px; border-radius: 99px; }
-h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1.08; margin: 16px 0 14px; letter-spacing: -0.02em; }
-h1 span { background: linear-gradient(120deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.lead { font-size: 1.15rem; color: var(--muted); max-width: 34em; }
-.ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
-.btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 12px; font-weight: 700; text-decoration: none; border: 1px solid var(--border); color: var(--text); background: var(--surface); }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-.btn .soon { font-size: .72rem; font-weight: 700; background: rgba(255,255,255,.22); padding: 2px 8px; border-radius: 99px; }
-.meta { margin-top: 18px; color: var(--muted); font-size: .9rem; }
+/* Hero */
+.hero { padding: 72px 0 48px; }
+.hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; }
+@media (max-width: 880px) { .hero { padding-top: 40px; } .hero .wrap { grid-template-columns: 1fr; gap: 40px; } }
+h1 { font-size: clamp(2.4rem, 5.4vw, 3.7rem); line-height: 1.05; margin: 0 0 18px; letter-spacing: -0.025em; font-weight: 800; text-wrap: balance; }
+h1 em { font-style: normal; color: var(--link); }
+.lead { font-size: 1.18rem; color: var(--muted); max-width: 34em; margin: 0; }
+.ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.btn { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 20px; border-radius: 12px; font-weight: 800; text-decoration: none; border: 1px solid var(--border); color: var(--text); background: var(--surface); }
+.btn:hover { background: var(--surface-2); }
+.btn.primary { background: var(--accent-ink); border-color: var(--accent-ink); color: #fff; }
+.btn.primary:hover { background: color-mix(in srgb, var(--accent-ink) 88%, #000); }
+.btn svg.i { width: 20px; height: 20px; }
+.meta { margin: 18px 0 0; color: var(--muted); font-size: .92rem; }
+.meta strong { color: var(--text); font-weight: 700; }
 
 /* Demo: a Quick Settings-like card */
 .demo {
   background: var(--shell); color: var(--shell-text);
-  border-radius: 28px; padding: 18px; box-shadow: 0 24px 60px rgba(10, 30, 70, .28);
+  border-radius: 28px; padding: 18px; box-shadow: var(--shadow);
+  border: 1px solid color-mix(in srgb, var(--shell-text) 8%, transparent);
   max-width: 420px; justify-self: center; width: 100%;
 }
+.demo :focus-visible { outline-color: #8cbcf3; }
 .demo-head { display: flex; align-items: center; gap: 12px; padding: 4px 6px 8px; }
-.demo-head .ico { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; font-size: 20px; }
-.demo-head b { font-size: 1.15rem; display: block; line-height: 1.2; }
-.demo-head small { color: #c9c9cf; font-weight: 700; }
-.demo-power { margin-left: auto; width: 46px; height: 26px; border-radius: 99px; border: 0; background: #55555c; position: relative; cursor: pointer; }
-.demo-power::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: left .2s; }
-.demo-power[aria-checked="true"] { background: var(--accent); }
-.demo-power[aria-checked="true"]::after { left: 23px; }
+.demo-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--shell-selected); display: grid; place-items: center; transition: background-color .3s; }
+.demo-icon.off { background: var(--shell-3); }
+.demo-head b { font-size: 1.12rem; display: block; line-height: 1.2; }
+.demo-head small { color: var(--shell-muted); font-weight: 700; }
+.toggle { position: relative; margin-left: auto; width: 46px; height: 26px; border-radius: 99px; border: 0; background: var(--shell-3); cursor: pointer; flex: none; }
+.toggle::before { content: ""; position: absolute; inset: -9px -4px; }   /* 44px hit area */
+.toggle::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform .2s cubic-bezier(.2, .8, .2, 1); }
+.toggle[aria-checked="true"] { background: var(--shell-on); }
+.toggle[aria-checked="true"]::after { transform: translateX(20px); }
 canvas { width: 100%; height: 130px; display: block; }
-.caption { text-align: center; font-weight: 700; font-size: .92rem; margin: 0 0 10px; min-height: 1.4em; }
+.caption { text-align: center; font-weight: 700; font-size: .92rem; margin: 0 0 12px; min-height: 1.4em; }
 .chips { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-.chip { background: var(--shell-2); color: var(--shell-text); border: 0; border-radius: 14px; padding: 8px 2px; font: inherit; font-size: .78rem; cursor: pointer; display: grid; justify-items: center; gap: 2px; }
-.chip span { font-size: 1.1rem; }
-.chip[aria-pressed="true"] { background: var(--accent); }
-.row { display: flex; align-items: center; justify-content: space-between; padding: 10px 6px; }
-.stepper { display: flex; align-items: center; gap: 18px; justify-content: center; padding: 6px 0 4px; }
-.round { width: 38px; height: 38px; border-radius: 50%; border: 0; background: var(--shell-2); color: #fff; font-size: 1.3rem; cursor: pointer; }
-.temp { font-size: 1.9rem; font-weight: 800; min-width: 4.2em; text-align: center; }
-.seg { display: flex; background: var(--shell-2); border-radius: 10px; padding: 3px; gap: 2px; }
-.seg button { border: 0; background: transparent; color: #ddd; font: inherit; font-size: .8rem; padding: 4px 9px; border-radius: 8px; cursor: pointer; }
-.seg button[aria-pressed="true"] { background: #5a5a62; color: #fff; }
-.switch { width: 42px; height: 24px; border-radius: 99px; border: 0; background: #55555c; position: relative; cursor: pointer; }
-.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: left .2s; }
-.switch[aria-checked="true"] { background: var(--accent); }
-.switch[aria-checked="true"]::after { left: 21px; }
-.demo-note { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 12px; }
+.chip { min-height: 56px; background: var(--shell-2); color: var(--shell-text); border: 0; border-radius: 14px; padding: 8px 2px; font: inherit; font-size: .78rem; font-weight: 700; cursor: pointer; display: grid; justify-items: center; align-content: center; gap: 2px; }
+.chip:hover { background: color-mix(in srgb, var(--shell-2) 80%, #fff); }
+.chip svg.i { width: 20px; height: 20px; }
+.chip[aria-pressed="true"] { background: var(--shell-selected); color: #fff; }
+.stepper { display: flex; align-items: center; gap: 14px; justify-content: center; padding: 8px 0 4px; }
+.round { width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--shell-2); color: var(--shell-text); cursor: pointer; display: grid; place-items: center; }
+.round:hover { background: color-mix(in srgb, var(--shell-2) 80%, #fff); }
+.temp { font-size: 1.9rem; font-weight: 800; min-width: 4.2em; text-align: center; transition: opacity .2s; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 6px; min-height: 52px; }
+.row .toggle { margin-left: 0; }
+.seg { display: flex; background: var(--shell-2); border-radius: 12px; padding: 3px; gap: 2px; }
+.seg button { min-height: 40px; min-width: 44px; border: 0; background: transparent; color: var(--shell-muted); font: inherit; font-size: .82rem; font-weight: 700; padding: 0 8px; border-radius: 9px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--shell-3); color: #fff; }
+.demo-note { text-align: center; color: var(--muted); font-size: .9rem; margin: 14px 0 0; }
 
-section { padding: 56px 0; }
-section h2 { font-size: clamp(1.6rem, 3vw, 2.1rem); margin: 0 0 8px; letter-spacing: -0.01em; }
-section .sub { color: var(--muted); margin: 0 0 28px; max-width: 46em; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
-.card .em { font-size: 1.5rem; }
-.card h3 { margin: 8px 0 6px; font-size: 1.05rem; }
-.card p { margin: 0; color: var(--muted); font-size: .95rem; }
+/* Sections */
+section { padding: 64px 0; }
+section h2 { font-size: clamp(1.7rem, 3.2vw, 2.25rem); line-height: 1.15; margin: 0 0 10px; letter-spacing: -0.015em; text-wrap: balance; }
+section .sub { color: var(--muted); margin: 0 0 32px; max-width: 42em; }
+
+.features .wrap { display: grid; grid-template-columns: 1fr 1.5fr; gap: 56px; }
+.features .intro { position: sticky; top: 92px; align-self: start; }
+.features .intro .sub { margin-bottom: 0; }
+@media (max-width: 880px) { .features .wrap { grid-template-columns: 1fr; gap: 20px; } .features .intro { position: static; } }
+.flist { list-style: none; margin: 0; padding: 0; }
+.flist li { display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 22px 0; border-top: 1px solid var(--border); }
+.flist li:last-child { border-bottom: 1px solid var(--border); }
+.flist .ico { width: 44px; height: 44px; border-radius: 12px; background: var(--tint); color: var(--accent-ink); display: grid; place-items: center; }
+@media (prefers-color-scheme: dark) { .flist .ico { color: var(--link); } }
+.flist h3 { margin: 0 0 4px; font-size: 1.08rem; }
+.flist p { margin: 0; color: var(--muted); max-width: 40em; }
+
 .brands { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media (max-width: 760px) { .brands { grid-template-columns: 1fr; } }
-.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-.tags span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 99px; padding: 2px 10px; font-size: .82rem; font-weight: 600; }
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+.panel h3 { margin: 0 0 8px; font-size: 1.15rem; }
+.panel p { margin: 0; color: var(--muted); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 0; padding: 0; list-style: none; }
+.tags li { background: var(--surface-2); border: 1px solid var(--border); border-radius: 99px; padding: 2px 10px; font-size: .85rem; font-weight: 700; }
+
 .shots { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; align-items: start; }
 @media (max-width: 760px) { .shots { grid-template-columns: 1fr; } }
 .shots img { width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface); }
-ol.steps { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
-ol.steps li { counter-increment: s; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px 14px 56px; position: relative; }
-ol.steps li::before { content: counter(s); position: absolute; left: 14px; top: 12px; width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 800; display: grid; place-items: center; }
-pre { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; overflow-x: auto; font-size: .9rem; }
+
+.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 46em; }
+.steps li { display: grid; grid-template-columns: 32px 1fr; gap: 14px; align-items: start; }
+.steps .n { width: 32px; height: 32px; border-radius: 50%; background: var(--accent-ink); color: #fff; font-weight: 800; display: grid; place-items: center; }
+.steps p { margin: 4px 0 0; }
+pre { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; overflow-x: auto; font-size: .9rem; margin: 10px 0 0; }
 code { font-family: "Source Code Pro", ui-monospace, monospace; }
-.sec li { margin: 6px 0; }
-footer { border-top: 1px solid var(--border); padding: 28px 0 40px; color: var(--muted); font-size: .88rem; }
+.soon { color: var(--muted); font-size: .95rem; margin: 18px 0 0; }
+
+.sec ul { margin: 0; padding-left: 1.2em; max-width: 46em; }
+.sec li { margin: 8px 0; }
+.sec li::marker { color: var(--accent); }
+
+footer { border-top: 1px solid var(--border); padding: 28px 0 40px; color: var(--muted); font-size: .9rem; }
 footer .wrap { display: grid; gap: 6px; }
 </style>
 </head>
 <body>
-<nav>
+<!-- Icon set: authored 24px strokes, one weight -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-wind" viewBox="0 0 24 24"><path d="M3 8h10a3 3 0 1 0-3-3"/><path d="M3 12h15a3 3 0 1 1-3 3"/><path d="M3 16h6"/></symbol>
+  <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 3v8"/><path d="M6.3 6.8a8 8 0 1 0 11.4 0"/></symbol>
+  <symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5"/><path d="M9.5 2.5h5"/></symbol>
+  <symbol id="i-direction" viewBox="0 0 24 24"><path d="M12 20V5"/><path d="M12 20 6 8"/><path d="m12 20 6-12"/><path d="M4 4h16"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 18a8 8 0 1 1 16 0"/><path d="m12 18 4-6"/><path d="M8 18h8"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-cool" viewBox="0 0 24 24"><path d="M12 3v18"/><path d="m4.2 7.5 15.6 9"/><path d="m19.8 7.5-15.6 9"/><path d="m9.5 4.5 2.5 2 2.5-2"/><path d="m9.5 19.5 2.5-2 2.5 2"/></symbol>
+  <symbol id="i-dry" viewBox="0 0 24 24"><path d="M12 3c3.6 4.6 6 7.8 6 11a6 6 0 0 1-12 0c0-3.2 2.4-6.4 6-11z"/></symbol>
+  <symbol id="i-auto" viewBox="0 0 24 24"><path d="M19.5 10A8 8 0 0 0 5.6 6.5"/><path d="M5 3.5v3.5h3.5"/><path d="M4.5 14a8 8 0 0 0 13.9 3.5"/><path d="M19 20.5V17h-3.5"/></symbol>
+  <symbol id="i-heat" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M6 12h12"/><path d="M12 6v12"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 7-5 5 5 5"/><path d="m16 7 5 5-5 5"/></symbol>
+</svg>
+
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+
+<nav aria-label="Primary">
   <div class="wrap">
-    <a class="brand" href="#"><img src="assets/logo-128.png" alt="">Brisa</a>
+    <a class="brand" href="#main"><img src="assets/logo-128.png" alt="" width="30" height="30">Brisa</a>
     <div class="links">
       <a class="hide-sm" href="#features" data-i18n="nav.features">Features</a>
       <a class="hide-sm" href="#brands" data-i18n="nav.brands">Brands</a>
       <a class="hide-sm" href="#install" data-i18n="nav.install">Install</a>
       <a href="https://github.com/Lciarallo/brisa">GitHub</a>
-      <button class="lang" id="lang" type="button" aria-label="Change language">PT</button>
+      <button class="lang" id="lang" type="button" lang="pt-BR" aria-label="PT – Português">PT</button>
     </div>
   </div>
 </nav>
 
-<header class="hero">
+<main id="main">
+<section class="hero" aria-labelledby="title">
   <div class="wrap">
     <div>
-      <span class="eyebrow" data-i18n="hero.eyebrow">GNOME Shell extension · free software</span>
-      <h1 data-i18n-html="hero.title">Your air conditioner, <span>one click away</span>.</h1>
-      <p class="lead" data-i18n="hero.lead">Brisa puts your A/C in GNOME Quick Settings: power, temperature, modes, fan, swing, timers and sensors, with a live animation of what the unit is doing right now.</p>
+      <h1 id="title" data-i18n-html="hero.title">Your air conditioner, <em>one click away</em>.</h1>
+      <p class="lead" data-i18n="hero.lead">Brisa is a GNOME Shell extension that puts your A/C in Quick Settings: power, temperature, modes, fan, swing, timers and sensors, with a live animation of what the unit is doing right now.</p>
       <div class="ctas">
-        <a class="btn primary" href="https://extensions.gnome.org/" data-i18n-html="hero.ego">Get it on GNOME Extensions <span class="soon">in review</span></a>
-        <a class="btn" href="https://github.com/Lciarallo/brisa" data-i18n="hero.source">Source code</a>
+        <a class="btn primary" href="#install"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg><span data-i18n="hero.install">Install from source</span></a>
+        <a class="btn" href="https://github.com/Lciarallo/brisa"><svg class="i" aria-hidden="true"><use href="#i-code"/></svg><span data-i18n="hero.source">View on GitHub</span></a>
       </div>
-      <p class="meta" data-i18n="hero.meta">GNOME 47–50 · LG ThinQ and Home Assistant · GPL-3.0-or-later</p>
+      <p class="meta" data-i18n-html="hero.meta"><strong>GNOME 47–50</strong> · LG ThinQ and Home Assistant · free software, GPL-3.0-or-later. A listing on extensions.gnome.org is coming soon.</p>
     </div>
 
     <div>
-      <div class="demo" role="group" aria-label="Interactive demo">
+      <div class="demo" role="group" aria-label="Interactive demo" data-i18n-aria="aria.demo">
         <div class="demo-head">
-          <div class="ico" id="demoIcon" aria-hidden="true">❄</div>
+          <div class="demo-icon" id="demoIcon" aria-hidden="true"><svg class="i"><use href="#i-cool"/></svg></div>
           <div><b data-i18n="demo.title">Air conditioner</b><small id="room"></small></div>
-          <button class="demo-power" id="power" role="switch" aria-checked="true" aria-label="Power"></button>
+          <button class="toggle" id="power" type="button" role="switch" aria-checked="true" aria-label="Power" data-i18n-aria="aria.power"></button>
         </div>
-        <canvas id="ac" width="760" height="260" aria-label="Animation of the air conditioner"></canvas>
-        <p class="caption" id="caption"></p>
+        <canvas id="ac" role="img" aria-label="Animation of the air conditioner" data-i18n-aria="aria.canvas"></canvas>
+        <p class="caption" id="caption" aria-live="polite"></p>
         <div class="chips" id="modes"></div>
         <div class="stepper">
-          <button class="round" id="minus" aria-label="Lower temperature">−</button>
-          <div class="temp" id="temp">23 °C</div>
-          <button class="round" id="plus" aria-label="Raise temperature">+</button>
+          <button class="round" id="minus" type="button" aria-label="Lower temperature" data-i18n-aria="aria.minus"><svg class="i" aria-hidden="true"><use href="#i-minus"/></svg></button>
+          <div class="temp" id="temp" aria-live="polite">23 °C</div>
+          <button class="round" id="plus" type="button" aria-label="Raise temperature" data-i18n-aria="aria.plus"><svg class="i" aria-hidden="true"><use href="#i-plus"/></svg></button>
         </div>
-        <div class="row"><span data-i18n="demo.fan">Fan speed</span><div class="seg" id="fan"></div></div>
-        <div class="row"><span data-i18n="demo.swing">Swing</span><button class="switch" id="swing" role="switch" aria-checked="true" aria-label="Swing"></button></div>
+        <div class="row"><span id="fanLabel" data-i18n="demo.fan">Fan speed</span><div class="seg" id="fan" role="group" aria-labelledby="fanLabel"></div></div>
+        <div class="row"><span id="swingLabel" data-i18n="demo.swing">Swing</span><button class="toggle" id="swing" type="button" role="switch" aria-checked="true" aria-labelledby="swingLabel"></button></div>
       </div>
       <p class="demo-note" data-i18n="demo.note">Try it: this is the same animation the extension draws in the menu.</p>
     </div>
   </div>
-</header>
+</section>
 
-<section id="features">
+<section class="features" id="features" aria-labelledby="features-title">
   <div class="wrap">
-    <h2 data-i18n="features.title">Everything your unit can do</h2>
-    <p class="sub" data-i18n="features.sub">The menu is built from the capabilities your device reports, so you see exactly the controls your model supports, and nothing it doesn't.</p>
-    <div class="grid">
-      <div class="card"><div class="em">🌬️</div><h3 data-i18n="f1.t">Live animation</h3><p data-i18n="f1.d">Airflow colour follows the mode and its speed follows the fan. The vanes sweep while swing is on, and the flow calms down when the room reaches the target.</p></div>
-      <div class="card"><div class="em">⚡</div><h3 data-i18n="f2.t">One-click control</h3><p data-i18n="f2.d">Toggle power from Quick Settings. Pick a mode and the unit turns on in it. Several temperature clicks become a single request.</p></div>
-      <div class="card"><div class="em">⏱️</div><h3 data-i18n="f3.t">Timers</h3><p data-i18n="f3.d">Sleep timer, turn off in N hours, and turn on or off at a set time, every 30 minutes.</p></div>
-      <div class="card"><div class="em">🧭</div><h3 data-i18n="f4.t">Air direction &amp; features</h3><p data-i18n="f4.d">Vertical and horizontal swing, special winds, energy saving, display light, purification and presets.</p></div>
-      <div class="card"><div class="em">📈</div><h3 data-i18n="f5.t">Sensors</h3><p data-i18n="f5.d">Room temperature, humidity, PM2.5, air quality and filter life, when your unit has them.</p></div>
-      <div class="card"><div class="em">🔐</div><h3 data-i18n="f6.t">Private by design</h3><p data-i18n="f6.d">Tokens live in the GNOME Keyring. No telemetry. Brisa only talks to the LG cloud or your own Home Assistant.</p></div>
+    <div class="intro">
+      <h2 id="features-title" data-i18n="features.title">Everything your unit can do</h2>
+      <p class="sub" data-i18n="features.sub">The menu is built from the capabilities your device reports, so you see exactly the controls your model supports, and nothing it doesn't.</p>
     </div>
+    <ul class="flist">
+      <li><span class="ico" aria-hidden="true"><svg class="i"><use href="#i-wind"/></svg></span><div><h3 data-i18n="f1.t">Live animation</h3><p data-i18n="f1.d">Airflow colour follows the mode and its speed follows the fan. The vanes sweep while swing is on, and the flow calms down when the room reaches the target.</p></div></li>
+      <li><span class="ico" aria-hidden="true"><svg class="i"><use href="#i-power"/></svg></span><div><h3 data-i18n="f2.t">One-click control</h3><p data-i18n="f2.d">Toggle power from Quick Settings. Pick a mode and the unit turns on in it. Several temperature clicks become a single request.</p></div></li>
+      <li><span class="ico" aria-hidden="true"><svg class="i"><use href="#i-timer"/></svg></span><div><h3 data-i18n="f3.t">Timers</h3><p data-i18n="f3.d">Sleep timer, turn off in a few hours, and turn on or off at a set time, every 30 minutes.</p></div></li>
+      <li><span class="ico" aria-hidden="true"><svg class="i"><use href="#i-direction"/></svg></span><div><h3 data-i18n="f4.t">Air direction and features</h3><p data-i18n="f4.d">Vertical and horizontal swing, special winds, energy saving, display light, purification and presets.</p></div></li>
+      <li><span class="ico" aria-hidden="true"><svg class="i"><use href="#i-gauge"/></svg></span><div><h3 data-i18n="f5.t">Sensors</h3><p data-i18n="f5.d">Room temperature, humidity, PM2.5, air quality and filter life, when your unit has them.</p></div></li>
+      <li><span class="ico" aria-hidden="true"><svg class="i"><use href="#i-lock"/></svg></span><div><h3 data-i18n="f6.t">Private by design</h3><p data-i18n="f6.d">Tokens stay in the GNOME Keyring, and Brisa talks only to the LG cloud or to your own Home Assistant, with no analytics of any kind.</p></div></li>
+    </ul>
   </div>
 </section>
 
-<section id="brands">
+<section id="brands" aria-labelledby="brands-title">
   <div class="wrap">
-    <h2 data-i18n="brands.title">Works with your brand</h2>
+    <h2 id="brands-title" data-i18n="brands.title">Works with your brand</h2>
     <p class="sub" data-i18n="brands.sub">Two ways in: LG's official cloud API, or Home Assistant for everything else.</p>
     <div class="brands">
-      <div class="card">
+      <div class="panel">
         <h3>LG ThinQ</h3>
-        <p data-i18n="brands.lg">Direct connection through LG's official ThinQ Connect API, using a Personal Access Token created on LG's site. No server needed.</p>
+        <p data-i18n="brands.lg">Connects directly to LG's official ThinQ Connect API with a Personal Access Token created on LG's site, without any extra server to run.</p>
       </div>
-      <div class="card">
-        <h3 data-i18n="brands.ha.t">Home Assistant: any brand</h3>
+      <div class="panel">
+        <h3 data-i18n="brands.ha.t">Home Assistant, for any brand</h3>
         <p data-i18n="brands.ha">Every Home Assistant climate entity works, through your server's REST API and a long-lived token.</p>
-        <div class="tags"><span>Samsung</span><span>Midea</span><span>Springer</span><span>Elgin</span><span>Gree</span><span>Daikin</span><span>Fujitsu</span><span>Panasonic</span><span>Tuya</span><span>Sensibo</span><span>Broadlink IR</span><span data-i18n="brands.more">and more</span></div>
+        <ul class="tags"><li>Samsung</li><li>Midea</li><li>Springer</li><li>Elgin</li><li>Gree</li><li>Daikin</li><li>Fujitsu</li><li>Panasonic</li><li>Tuya</li><li>Sensibo</li><li>Broadlink IR</li><li data-i18n="brands.more">and more</li></ul>
       </div>
     </div>
   </div>
 </section>
 
-<section>
+<section aria-labelledby="shots-title">
   <div class="wrap">
-    <h2 data-i18n="shots.title">Native to GNOME</h2>
-    <p class="sub" data-i18n="shots.sub">Built with GNOME Shell's own widgets and libadwaita settings. It follows your light or dark style and accent colour.</p>
+    <h2 id="shots-title" data-i18n="shots.title">Native to GNOME</h2>
+    <p class="sub" data-i18n="shots.sub">Built with GNOME Shell's own widgets and libadwaita settings, so it follows your light or dark style and accent colour.</p>
     <div class="shots">
-      <img src="assets/screenshots/hero.png" alt="Brisa menu in Quick Settings, cooling and heating" loading="lazy" width="960" height="940">
-      <img src="assets/screenshots/prefs-en.png" alt="Brisa settings window" loading="lazy" width="549" height="674" id="prefsShot">
+      <img src="assets/screenshots/hero.png" alt="Brisa menu in Quick Settings: cooling in Portuguese and heating in English" data-i18n-alt="alt.hero" loading="lazy" width="960" height="940">
+      <img src="assets/screenshots/prefs-en.png" alt="Brisa settings window" data-i18n-alt="alt.prefs" loading="lazy" width="549" height="674" id="prefsShot">
     </div>
   </div>
 </section>
 
-<section id="install">
+<section id="install" aria-labelledby="install-title">
   <div class="wrap">
-    <h2 data-i18n="install.title">Install</h2>
+    <h2 id="install-title" data-i18n="install.title">Install</h2>
     <ol class="steps">
-      <li data-i18n-html="install.s1">Install <b>Brisa</b> from <a href="https://extensions.gnome.org/">extensions.gnome.org</a> or the <b>Extension Manager</b> app. Or build it from source:</li>
-    </ol>
-    <pre><code>git clone https://github.com/Lciarallo/brisa.git
+      <li><span class="n" aria-hidden="true">1</span><div><p data-i18n="install.s1">Clone the repository and install it for your user, then log out and back in:</p>
+<pre><code>git clone https://github.com/Lciarallo/brisa.git
 cd brisa
-make install   # then log out and back in</code></pre>
-    <ol class="steps" start="2" style="counter-reset: s 1">
-      <li data-i18n-html="install.s2">Open <b>Extensions → Brisa → Settings</b> and choose <b>LG ThinQ</b> or <b>Home Assistant</b>.</li>
-      <li data-i18n-html="install.s3">LG: create a token at <a href="https://connect-pat.lgthinq.com">connect-pat.lgthinq.com</a>. Home Assistant: create a long-lived token in your profile → Security.</li>
-      <li data-i18n-html="install.s4">Paste the token (it goes to the GNOME Keyring), press <b>Search</b>, and pick your unit.</li>
+make install</code></pre></div></li>
+      <li><span class="n" aria-hidden="true">2</span><p data-i18n-html="install.s2">Open <b>Extensions → Brisa → Settings</b> and choose <b>LG ThinQ</b> or <b>Home Assistant</b>.</p></li>
+      <li><span class="n" aria-hidden="true">3</span><p data-i18n-html="install.s3">For LG, create a token at <a href="https://connect-pat.lgthinq.com">connect-pat.lgthinq.com</a>. For Home Assistant, create a long-lived token in your profile, under Security.</p></li>
+      <li><span class="n" aria-hidden="true">4</span><p data-i18n-html="install.s4">Paste the token (it goes to the GNOME Keyring), press <b>Search</b> and pick your unit.</p></li>
     </ol>
+    <p class="soon" data-i18n="install.soon">A one-click install from extensions.gnome.org and the Extension Manager app is on the way.</p>
   </div>
 </section>
 
-<section>
+<section class="sec" aria-labelledby="sec-title">
   <div class="wrap">
-    <h2 data-i18n="sec.title">Security</h2>
-    <ul class="sec">
+    <h2 id="sec-title" data-i18n="sec.title">Security</h2>
+    <ul>
       <li data-i18n="sec.1">Tokens are stored in the GNOME Keyring (libsecret), never in dconf.</li>
-      <li data-i18n="sec.2">HTTPS with certificate checks. Plain http only for Home Assistant on your local network, with a warning.</li>
-      <li data-i18n="sec.3">Redirects are refused, so the token is never replayed to another host. Responses are capped and every id used in a URL is validated.</li>
-      <li data-i18n="sec.4">No telemetry and no dependencies beyond GNOME's own libraries.</li>
+      <li data-i18n="sec.2">HTTPS with certificate checks. Plain http is accepted only for Home Assistant on your local network, and the settings warn about it.</li>
+      <li data-i18n="sec.3">Redirects are refused so the token is never replayed to another host. Responses are size-capped, and every id used in a URL is validated.</li>
+      <li data-i18n="sec.4">There is no telemetry, and the only libraries used are GNOME's own: GJS, libsoup and libsecret.</li>
     </ul>
-    <p><a href="https://github.com/Lciarallo/brisa/blob/main/SECURITY.md" data-i18n="sec.more">Read the full threat model →</a></p>
+    <p><a href="https://github.com/Lciarallo/brisa/blob/main/SECURITY.md" data-i18n="sec.more">Read the full threat model</a></p>
   </div>
 </section>
+</main>
 
 <footer>
   <div class="wrap">
@@ -269,178 +349,255 @@ make install   # then log out and back in</code></pre>
 <script>
 (() => {
   const PT = {
+    'skip': 'Pular para o conteúdo',
     'nav.features': 'Recursos', 'nav.brands': 'Marcas', 'nav.install': 'Instalar',
-    'hero.eyebrow': 'Extensão do GNOME Shell · software livre',
-    'hero.title': 'Seu ar-condicionado <span>a um clique</span>.',
-    'hero.lead': 'A Brisa coloca o seu ar nas Configurações Rápidas do GNOME: liga/desliga, temperatura, modos, ventilação, oscilação, timers e sensores, com uma animação ao vivo do que o aparelho está fazendo agora.',
-    'hero.ego': 'Baixar no GNOME Extensions <span class="soon">em análise</span>',
-    'hero.source': 'Código-fonte',
-    'hero.meta': 'GNOME 47–50 · LG ThinQ e Home Assistant · GPL-3.0-or-later',
+    'hero.title': 'Seu ar-condicionado <em>a um clique</em>.',
+    'hero.lead': 'A Brisa é uma extensão do GNOME Shell que coloca o seu ar nas Configurações Rápidas: liga/desliga, temperatura, modos, ventilação, oscilação, timers e sensores, com uma animação ao vivo do que o aparelho está fazendo agora.',
+    'hero.install': 'Instalar pelo código',
+    'hero.source': 'Ver no GitHub',
+    'hero.meta': '<strong>GNOME 47–50</strong> · LG ThinQ e Home Assistant · software livre, GPL-3.0-or-later. Em breve no extensions.gnome.org.',
+    'aria.demo': 'Demonstração interativa', 'aria.power': 'Ligar ou desligar', 'aria.canvas': 'Animação do ar-condicionado',
+    'aria.minus': 'Diminuir temperatura', 'aria.plus': 'Aumentar temperatura',
+    'alt.hero': 'Menu da Brisa nas Configurações Rápidas: gelando em português e aquecendo em inglês',
+    'alt.prefs': 'Janela de configurações da Brisa',
     'demo.title': 'Ar-condicionado', 'demo.fan': 'Ventilação', 'demo.swing': 'Oscilação',
     'demo.note': 'Experimente: é a mesma animação que a extensão desenha no menu.',
     'features.title': 'Tudo o que o seu aparelho faz',
     'features.sub': 'O menu é montado a partir das capacidades que o aparelho informa. Você vê exatamente os controles que o seu modelo suporta, e nada além disso.',
     'f1.t': 'Animação ao vivo', 'f1.d': 'A cor do vento segue o modo e a velocidade segue a ventilação. As aletas oscilam quando a oscilação está ligada, e o fluxo diminui quando o ambiente chega na temperatura.',
     'f2.t': 'Controle com um clique', 'f2.d': 'Liga e desliga pelas Configurações Rápidas. Escolher um modo já liga o ar nesse modo. Vários cliques na temperatura viram um único comando.',
-    'f3.t': 'Timers', 'f3.d': 'Timer de sono, desligar em N horas e ligar ou desligar num horário, de 30 em 30 minutos.',
+    'f3.t': 'Timers', 'f3.d': 'Timer de sono, desligar em algumas horas e ligar ou desligar num horário, de 30 em 30 minutos.',
     'f4.t': 'Direção do vento e recursos', 'f4.d': 'Oscilação vertical e horizontal, ventos especiais, economia de energia, luz do display, purificação e predefinições.',
     'f5.t': 'Sensores', 'f5.d': 'Temperatura ambiente, umidade, PM2,5, qualidade do ar e vida do filtro, quando o aparelho tem.',
-    'f6.t': 'Privacidade desde a base', 'f6.d': 'Os tokens ficam no Chaveiro do GNOME. Sem telemetria. A Brisa só conversa com a nuvem da LG ou com o seu Home Assistant.',
+    'f6.t': 'Privacidade desde a base', 'f6.d': 'Os tokens ficam no Chaveiro do GNOME, e a Brisa só conversa com a nuvem da LG ou com o seu próprio Home Assistant, sem nenhum tipo de análise de uso.',
     'brands.title': 'Funciona com a sua marca', 'brands.sub': 'Dois caminhos: a API oficial da LG na nuvem, ou o Home Assistant para todas as outras.',
-    'brands.lg': 'Conexão direta pela API oficial ThinQ Connect da LG, com um Personal Access Token criado no site da LG. Não precisa de servidor.',
-    'brands.ha.t': 'Home Assistant: qualquer marca', 'brands.ha': 'Toda entidade climate do Home Assistant funciona, pela API REST do seu servidor e um token de longa duração.', 'brands.more': 'e mais',
-    'shots.title': 'Nativa do GNOME', 'shots.sub': 'Feita com os próprios componentes do GNOME Shell e configurações em libadwaita. Segue o seu estilo claro ou escuro e a cor de destaque.',
+    'brands.lg': 'Conecta direto na API oficial ThinQ Connect da LG, com um Personal Access Token criado no site da LG, sem nenhum servidor extra para manter.',
+    'brands.ha.t': 'Home Assistant, para qualquer marca', 'brands.ha': 'Toda entidade climate do Home Assistant funciona, pela API REST do seu servidor e um token de longa duração.', 'brands.more': 'e outras',
+    'shots.title': 'Nativa do GNOME', 'shots.sub': 'Feita com os próprios componentes do GNOME Shell e configurações em libadwaita, então segue o seu estilo claro ou escuro e a cor de destaque.',
     'install.title': 'Instalação',
-    'install.s1': 'Instale a <b>Brisa</b> pelo <a href="https://extensions.gnome.org/">extensions.gnome.org</a> ou pelo app <b>Gerenciador de Extensões</b>. Ou compile a partir do código:',
+    'install.s1': 'Clone o repositório e instale para o seu usuário. Depois saia da sessão e entre de novo:',
     'install.s2': 'Abra <b>Extensões → Brisa → Configurações</b> e escolha <b>LG ThinQ</b> ou <b>Home Assistant</b>.',
-    'install.s3': 'LG: crie um token em <a href="https://connect-pat.lgthinq.com">connect-pat.lgthinq.com</a>. Home Assistant: crie um token de longa duração em Perfil → Segurança.',
+    'install.s3': 'Para LG, crie um token em <a href="https://connect-pat.lgthinq.com">connect-pat.lgthinq.com</a>. Para Home Assistant, crie um token de longa duração no seu perfil, em Segurança.',
     'install.s4': 'Cole o token (ele vai para o Chaveiro do GNOME), clique em <b>Buscar</b> e escolha o aparelho.',
+    'install.soon': 'A instalação com um clique pelo extensions.gnome.org e pelo Gerenciador de Extensões está a caminho.',
     'sec.title': 'Segurança',
     'sec.1': 'Tokens guardados no Chaveiro do GNOME (libsecret), nunca no dconf.',
-    'sec.2': 'HTTPS com verificação de certificado. http simples só para o Home Assistant na rede local, com aviso.',
-    'sec.3': 'Redirecionamentos recusados, para que o token nunca seja reenviado a outro servidor. Respostas com limite de tamanho e todo id usado em URL é validado.',
-    'sec.4': 'Sem telemetria e sem dependências além das bibliotecas do próprio GNOME.',
-    'sec.more': 'Leia o modelo de ameaças completo →',
+    'sec.2': 'HTTPS com verificação de certificado. http simples só é aceito para o Home Assistant na rede local, e as configurações avisam sobre isso.',
+    'sec.3': 'Redirecionamentos são recusados para que o token nunca seja reenviado a outro servidor. As respostas têm limite de tamanho, e todo id usado em URL é validado.',
+    'sec.4': 'Não há telemetria, e as únicas bibliotecas usadas são as do próprio GNOME: GJS, libsoup e libsecret.',
+    'sec.more': 'Leia o modelo de ameaças completo',
     'footer.1': '© 2026 Luiz Eduardo Ciarallo · Software livre sob a <a href="https://github.com/Lciarallo/brisa/blob/main/LICENSE">GNU GPL v3.0 ou posterior</a>.',
     'footer.2': 'LG e ThinQ são marcas da LG Electronics, e Home Assistant é marca da Open Home Foundation. A Brisa é um projeto independente, sem vínculo com essas empresas.',
   };
   const MODES = [
-    {id: 'cool', icon: '❄', en: 'Cool', pt: 'Gelar', color: '#62a0ea'},
-    {id: 'dry', icon: '💧', en: 'Dry', pt: 'Secar', color: '#33c7de'},
-    {id: 'fan', icon: '🌀', en: 'Fan', pt: 'Ventilar', color: null},
-    {id: 'auto', icon: '⟳', en: 'Auto', pt: 'Auto', color: '#57e389'},
-    {id: 'heat', icon: '☀', en: 'Heat', pt: 'Aquecer', color: '#ff7800'},
+    {id: 'cool', icon: 'i-cool', en: 'Cool', pt: 'Gelar', color: '#62a0ea'},
+    {id: 'dry', icon: 'i-dry', en: 'Dry', pt: 'Secar', color: '#33c7de'},
+    {id: 'fan', icon: 'i-wind', en: 'Fan', pt: 'Ventilar', color: '#f2f2f2'},
+    {id: 'auto', icon: 'i-auto', en: 'Auto', pt: 'Auto', color: '#57e389'},
+    {id: 'heat', icon: 'i-heat', en: 'Heat', pt: 'Aquecer', color: '#ff7800'},
   ];
-  const FANS = [{id: 'low', en: 'Low', pt: 'Baixa', speed: .5}, {id: 'mid', en: 'Mid', pt: 'Média', speed: .8}, {id: 'high', en: 'High', pt: 'Alta', speed: 1.15}, {id: 'turbo', en: 'Turbo', pt: 'Turbo', speed: 1.5}];
+  const FANS = [
+    {id: 'low', en: 'Low', pt: 'Baixa', speed: .5},
+    {id: 'mid', en: 'Mid', pt: 'Média', speed: .8},
+    {id: 'high', en: 'High', pt: 'Alta', speed: 1.15},
+    {id: 'turbo', en: 'Turbo', pt: 'Turbo', speed: 1.5},
+  ];
+  const $ = id => document.getElementById(id);
+  const icon = name => `<svg class="i" aria-hidden="true"><use href="#${name}"/></svg>`;
 
   let lang = 'en';
-  try { lang = localStorage.getItem('brisa-lang') || ((navigator.language || '').toLowerCase().startsWith('pt') ? 'pt' : 'en'); } catch { /* storage unavailable */ }
+  try {
+    lang = localStorage.getItem('brisa-lang') || ((navigator.language || '').toLowerCase().startsWith('pt') ? 'pt' : 'en');
+  } catch { /* storage unavailable: fall back to English */ }
+
+  // English source strings are read from the markup once.
   const EN = {};
   document.querySelectorAll('[data-i18n]').forEach(el => { EN[el.dataset.i18n] = el.textContent; });
   document.querySelectorAll('[data-i18n-html]').forEach(el => { EN[el.dataset.i18nHtml] = el.innerHTML; });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => { EN[el.dataset.i18nAria] = el.getAttribute('aria-label'); });
+  document.querySelectorAll('[data-i18n-alt]').forEach(el => { EN[el.dataset.i18nAlt] = el.alt; });
+  const t = key => (lang === 'pt' ? PT[key] ?? EN[key] : EN[key]);
 
   const state = {power: true, mode: 'cool', target: 23, room: 26, fan: 'high', swing: true};
 
-  const $ = id => document.getElementById(id);
-  const modesBox = $('modes'), fanBox = $('fan');
   MODES.forEach(m => {
     const b = document.createElement('button');
     b.className = 'chip'; b.type = 'button'; b.dataset.mode = m.id;
-    b.innerHTML = `<span aria-hidden="true">${m.icon}</span><em style="font-style:normal"></em>`;
-    b.addEventListener('click', () => { state.mode = m.id; state.power = true; render(); });
-    modesBox.appendChild(b);
+    b.innerHTML = `${icon(m.icon)}<span></span>`;
+    b.addEventListener('click', () => { state.mode = m.id; state.power = true; update(); });
+    $('modes').appendChild(b);
   });
   FANS.forEach(f => {
     const b = document.createElement('button');
     b.type = 'button'; b.dataset.fan = f.id;
-    b.addEventListener('click', () => { state.fan = f.id; render(); });
-    fanBox.appendChild(b);
+    b.addEventListener('click', () => { state.fan = f.id; update(); });
+    $('fan').appendChild(b);
   });
-  $('power').addEventListener('click', () => { state.power = !state.power; render(); });
-  $('swing').addEventListener('click', () => { state.swing = !state.swing; render(); });
-  $('minus').addEventListener('click', () => { state.target = Math.max(16, state.target - 1); render(); });
-  $('plus').addEventListener('click', () => { state.target = Math.min(30, state.target + 1); render(); });
+  $('power').addEventListener('click', () => { state.power = !state.power; update(); });
+  $('swing').addEventListener('click', () => { state.swing = !state.swing; update(); });
+  $('minus').addEventListener('click', () => { state.target = Math.max(16, state.target - 1); update(); });
+  $('plus').addEventListener('click', () => { state.target = Math.min(30, state.target + 1); update(); });
   $('lang').addEventListener('click', () => {
     lang = lang === 'en' ? 'pt' : 'en';
-    try { localStorage.setItem('brisa-lang', lang); } catch { /* ignore */ }
+    try { localStorage.setItem('brisa-lang', lang); } catch { /* preference simply not kept */ }
     applyLang();
   });
 
   function applyLang() {
     document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
-    $('lang').textContent = lang === 'pt' ? 'EN' : 'PT';
-    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = lang === 'pt' ? PT[el.dataset.i18n] ?? EN[el.dataset.i18n] : EN[el.dataset.i18n]; });
-    document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = lang === 'pt' ? PT[el.dataset.i18nHtml] ?? EN[el.dataset.i18nHtml] : EN[el.dataset.i18nHtml]; });
+    const other = lang === 'pt' ? {code: 'EN', name: 'English', lang: 'en'} : {code: 'PT', name: 'Português', lang: 'pt-BR'};
+    $('lang').textContent = other.code;
+    $('lang').setAttribute('lang', other.lang);
+    $('lang').setAttribute('aria-label', `${other.code} – ${other.name}`);
+    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
+    document.querySelectorAll('[data-i18n-alt]').forEach(el => { el.alt = t(el.dataset.i18nAlt); });
     $('prefsShot').src = lang === 'pt' ? 'assets/screenshots/prefs-pt.png' : 'assets/screenshots/prefs-en.png';
-    render();
+    update();
   }
 
+  const isIdle = () => (state.mode === 'cool' && state.room <= state.target) || (state.mode === 'heat' && state.room >= state.target);
+
   function caption() {
-    const t = `${state.target} °C`;
+    const temp = `${state.target} °C`;
     if (!state.power) return lang === 'pt' ? 'Desligado' : 'Off';
-    const idle = (state.mode === 'cool' && state.room <= state.target) || (state.mode === 'heat' && state.room >= state.target);
-    if (idle) return lang === 'pt' ? `Em pausa — ambiente já está em ${t}` : `Idle — room is at ${t}`;
+    if (isIdle()) return lang === 'pt' ? `Em pausa — ambiente já está em ${temp}` : `Idle — room is at ${temp}`;
     return {
-      cool: lang === 'pt' ? `Gelando até ${t}` : `Cooling to ${t}`,
-      heat: lang === 'pt' ? `Aquecendo até ${t}` : `Heating to ${t}`,
+      cool: lang === 'pt' ? `Gelando até ${temp}` : `Cooling to ${temp}`,
+      heat: lang === 'pt' ? `Aquecendo até ${temp}` : `Heating to ${temp}`,
       dry: lang === 'pt' ? 'Retirando umidade do ar' : 'Removing humidity',
       fan: lang === 'pt' ? 'Circulando o ar' : 'Circulating air',
-      auto: lang === 'pt' ? `Mantendo ${t}` : `Keeping ${t}`,
+      auto: lang === 'pt' ? `Mantendo ${temp}` : `Keeping ${temp}`,
     }[state.mode];
   }
 
-  function render() {
+  function update() {
     state.room = state.mode === 'heat' ? 19 : 26;
-    modesBox.querySelectorAll('.chip').forEach(b => {
-      const m = MODES.find(x => x.id === b.dataset.mode);
-      b.querySelector('em').textContent = m[lang];
+    const mode = MODES.find(m => m.id === state.mode);
+    document.querySelectorAll('.chip').forEach(b => {
+      b.querySelector('span').textContent = MODES.find(m => m.id === b.dataset.mode)[lang];
       b.setAttribute('aria-pressed', String(state.power && b.dataset.mode === state.mode));
     });
-    fanBox.querySelectorAll('button').forEach(b => {
+    document.querySelectorAll('#fan button').forEach(b => {
       b.textContent = FANS.find(f => f.id === b.dataset.fan)[lang];
       b.setAttribute('aria-pressed', String(b.dataset.fan === state.fan));
     });
     $('power').setAttribute('aria-checked', String(state.power));
     $('swing').setAttribute('aria-checked', String(state.swing));
     $('temp').textContent = `${state.target} °C`;
-    $('temp').style.opacity = state.power ? 1 : .45;
+    $('temp').style.opacity = state.power ? 1 : .5;
     $('caption').textContent = caption();
-    $('room').textContent = (lang === 'pt' ? 'Ambiente: ' : 'Room: ') + `${state.room} °C`;
-    $('demoIcon').textContent = state.power ? MODES.find(m => m.id === state.mode).icon : '⏻';
+    $('room').textContent = `${lang === 'pt' ? 'Ambiente' : 'Room'}: ${state.room} °C`;
+    $('demoIcon').innerHTML = icon(state.power ? mode.icon : 'i-power');
+    $('demoIcon').classList.toggle('off', !state.power);
+    draw();
+    syncLoop();
   }
 
-  // Canvas port of ui/animation.js
-  const canvas = $('ac'), cr = canvas.getContext('2d');
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Canvas port of the extension's ui/animation.js.
+  const canvas = $('ac');
+  const cr = canvas.getContext('2d');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let scale = 1, onScreen = true, rafId = 0;
+
+  // The backing store follows the element's real size, so nothing is stretched.
+  function fit() {
+    const rect = canvas.getBoundingClientRect();
+    scale = Math.min(3, window.devicePixelRatio || 1);
+    canvas.width = Math.max(1, Math.round(rect.width * scale));
+    canvas.height = Math.max(1, Math.round(rect.height * scale));
+    draw();
+  }
+  new ResizeObserver(fit).observe(canvas);
+  new IntersectionObserver(entries => { onScreen = entries[0].isIntersecting; syncLoop(); }).observe(canvas);
+  document.addEventListener('visibilitychange', syncLoop);
+  reduce.addEventListener('change', () => { syncLoop(); draw(); });
+
+  function syncLoop() {
+    const run = onScreen && !document.hidden && !reduce.matches && state.power;
+    if (run && !rafId) rafId = requestAnimationFrame(loop);
+    if (!run && rafId) { cancelAnimationFrame(rafId); rafId = 0; }
+  }
+  function loop(ms) { draw(ms); rafId = requestAnimationFrame(loop); }
+
   const jitter = i => { const x = Math.sin(i * 12.9898) * 43758.5453; return x - Math.floor(x); };
   const rgba = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${a})`; };
-  function frame(ms) {
-    const t = reduce ? 1.2 : ms / 1000;
-    const dpr = 2, w = canvas.width / dpr, h = canvas.height / dpr;
-    cr.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  function draw(ms = performance.now()) {
+    const time = reduce.matches ? 1.2 : ms / 1000;
+    const w = canvas.width / scale, h = canvas.height / scale;
+    cr.setTransform(scale, 0, 0, scale, 0, 0);
     cr.clearRect(0, 0, w, h);
-    const on = state.power, fg = '#f2f2f2';
-    const mode = MODES.find(m => m.id === state.mode);
-    const color = mode.color ?? fg;
-    const uw = Math.min(w * .78, 300), uh = 42, ux = (w - uw) / 2, uy = 8;
+    const on = state.power;
+    const color = MODES.find(m => m.id === state.mode).color;
+    const fg = a => `rgba(242,242,242,${a})`;
+
+    const uw = Math.min(w * .82, 300), uh = 42, ux = (w - uw) / 2, uy = 8;
     cr.beginPath(); cr.roundRect(ux, uy, uw, uh, 14);
-    cr.fillStyle = 'rgba(242,242,242,.08)'; cr.fill();
-    cr.strokeStyle = on ? 'rgba(242,242,242,.5)' : 'rgba(242,242,242,.25)'; cr.lineWidth = 1.5; cr.stroke();
-    cr.beginPath(); cr.arc(ux + 17, uy + 15, 3.5, 0, 7);
-    cr.fillStyle = on ? rgba(color.length === 7 ? color : '#f2f2f2', .6 + .4 * Math.abs(Math.sin(t * 1.5))) : 'rgba(242,242,242,.2)'; cr.fill();
-    if (on) { cr.font = 'bold 13px Cantarell, system-ui, sans-serif'; cr.fillStyle = color; cr.textAlign = 'right'; cr.fillText(`${state.target}°`, ux + uw - 14, uy + 20); }
+    cr.fillStyle = fg(.08); cr.fill();
+    cr.strokeStyle = fg(on ? .5 : .25); cr.lineWidth = 1.5; cr.stroke();
+
+    cr.beginPath(); cr.arc(ux + 17, uy + 15, 3.5, 0, Math.PI * 2);
+    cr.fillStyle = on ? rgba(color, .6 + .4 * Math.abs(Math.sin(time * 1.5))) : fg(.2); cr.fill();
+    if (on) {
+      cr.font = '700 13px Cantarell, system-ui, sans-serif';
+      cr.fillStyle = color; cr.textAlign = 'right';
+      cr.fillText(`${state.target}°`, ux + uw - 14, uy + 20);
+    }
+
     const ventY = uy + uh - 8, vx1 = ux + 26, vx2 = ux + uw - 26;
-    const angle = on ? (state.swing ? Math.sin(t * 1.1) * .55 : .12) : 0;
-    cr.strokeStyle = on ? 'rgba(242,242,242,.55)' : 'rgba(242,242,242,.3)'; cr.lineWidth = 2; cr.lineCap = 'round';
+    const angle = on ? (state.swing ? Math.sin(time * 1.1) * .55 : .12) : 0;
+    cr.strokeStyle = fg(on ? .55 : .3); cr.lineWidth = 2; cr.lineCap = 'round';
     cr.beginPath();
-    if (!on) { cr.moveTo(vx1, ventY); cr.lineTo(vx2, ventY); } else {
-      for (let i = 0; i <= 7; i++) { const x = vx1 + (vx2 - vx1) * i / 7; cr.moveTo(x - Math.sin(angle) * 4, ventY - Math.cos(angle) * 3); cr.lineTo(x + Math.sin(angle) * 4, ventY + Math.cos(angle) * 3); }
+    if (!on) {
+      cr.moveTo(vx1, ventY); cr.lineTo(vx2, ventY);
+    } else {
+      for (let i = 0; i <= 7; i++) {
+        const x = vx1 + (vx2 - vx1) * i / 7;
+        cr.moveTo(x - Math.sin(angle) * 4, ventY - Math.cos(angle) * 3);
+        cr.lineTo(x + Math.sin(angle) * 4, ventY + Math.cos(angle) * 3);
+      }
     }
     cr.stroke();
-    if (on) {
-      const idle = (state.mode === 'cool' && state.room <= state.target) || (state.mode === 'heat' && state.room >= state.target);
-      const speed = idle ? .25 : FANS.find(f => f.id === state.fan).speed;
-      const strength = idle ? .3 : 1, span = h - ventY - 8;
-      for (let i = 0; i < 18; i++) {
-        const rate = state.mode === 'dry' ? speed * .45 : speed * .7;
-        const phase = (t * rate + jitter(i)) % 1, dist = phase * span;
-        const x = vx1 + (vx2 - vx1) * (i + .5) / 18 + Math.sin(angle) * dist * .9 + Math.sin(t * 2 + i) * 2;
-        const y = ventY + 6 + dist, a = Math.pow(1 - phase, 1.3) * .85 * strength;
-        cr.strokeStyle = cr.fillStyle = rgba(color.length === 7 ? color : '#f2f2f2', a);
-        cr.beginPath();
-        if (state.mode === 'dry') { cr.moveTo(x, y - 4); cr.bezierCurveTo(x + 3, y, x + 3, y + 3, x, y + 3); cr.bezierCurveTo(x - 3, y + 3, x - 3, y, x, y - 4); cr.fill(); }
-        else if (state.mode === 'heat') { cr.lineWidth = 2; cr.moveTo(x - 4, y); cr.bezierCurveTo(x - 2, y - 3, x + 2, y + 3, x + 4, y); cr.stroke(); }
-        else {
-          const len = 6 + 8 * speed; cr.lineWidth = 2; cr.moveTo(x, y); cr.lineTo(x + Math.sin(angle) * len * .9, y + len); cr.stroke();
-          if (state.mode === 'cool' && i % 3 === 0) { cr.lineWidth = 1; cr.beginPath(); for (let k = 0; k < 3; k++) { const b = k * Math.PI / 3 + t; cr.moveTo(x + 6 - Math.cos(b) * 3, y + 4 - Math.sin(b) * 3); cr.lineTo(x + 6 + Math.cos(b) * 3, y + 4 + Math.sin(b) * 3); } cr.stroke(); }
+    if (!on) return;
+
+    const idle = isIdle();
+    const speed = idle ? .25 : FANS.find(f => f.id === state.fan).speed;
+    const strength = idle ? .3 : 1, span = h - ventY - 8;
+    for (let i = 0; i < 18; i++) {
+      const rate = state.mode === 'dry' ? speed * .45 : speed * .7;
+      const phase = (time * rate + jitter(i)) % 1, dist = phase * span;
+      const x = vx1 + (vx2 - vx1) * (i + .5) / 18 + Math.sin(angle) * dist * .9 + Math.sin(time * 2 + i) * 2;
+      const y = ventY + 6 + dist, a = Math.pow(1 - phase, 1.3) * .85 * strength;
+      cr.strokeStyle = cr.fillStyle = rgba(color, a);
+      cr.beginPath();
+      if (state.mode === 'dry') {
+        cr.moveTo(x, y - 4);
+        cr.bezierCurveTo(x + 3, y, x + 3, y + 3, x, y + 3);
+        cr.bezierCurveTo(x - 3, y + 3, x - 3, y, x, y - 4);
+        cr.fill();
+      } else if (state.mode === 'heat') {
+        cr.lineWidth = 2;
+        cr.moveTo(x - 4, y); cr.bezierCurveTo(x - 2, y - 3, x + 2, y + 3, x + 4, y);
+        cr.stroke();
+      } else {
+        const len = 6 + 8 * speed;
+        cr.lineWidth = 2; cr.moveTo(x, y); cr.lineTo(x + Math.sin(angle) * len * .9, y + len); cr.stroke();
+        if (state.mode === 'cool' && i % 3 === 0) {
+          cr.lineWidth = 1; cr.beginPath();
+          for (let k = 0; k < 3; k++) {
+            const b = k * Math.PI / 3 + time;
+            cr.moveTo(x + 6 - Math.cos(b) * 3, y + 4 - Math.sin(b) * 3);
+            cr.lineTo(x + 6 + Math.cos(b) * 3, y + 4 + Math.sin(b) * 3);
+          }
+          cr.stroke();
         }
       }
     }
-    if (!reduce) requestAnimationFrame(frame);
   }
+
   applyLang();
-  if (reduce) { frame(0); document.querySelectorAll('button').forEach(b => b.addEventListener('click', () => frame(0))); }
-  else requestAnimationFrame(frame);
 })();
 </script>
 </body>

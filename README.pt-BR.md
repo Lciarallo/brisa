@@ -53,7 +53,7 @@
 
 ### Pela loja (extensions.gnome.org)
 
-*Em análise.* Depois de aprovada, instale pelo app **Gerenciador de extensões** ou pelo site.
+*Em breve.* A Brisa ainda não foi enviada. Quando estiver publicada, dá para instalar pelo site ou pelo app **Gerenciador de Extensões**.
 
 ### Pelo código-fonte
 
