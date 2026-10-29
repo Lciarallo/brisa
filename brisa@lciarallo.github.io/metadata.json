@@ -1,0 +1,9 @@
+{
+  "uuid": "brisa@lciarallo.github.io",
+  "name": "Brisa",
+  "description": "Control your air conditioner from Quick Settings: power, temperature, mode, fan, air direction, timers and sensors, with a live animation of what the unit is doing.\n\nWorks with LG ThinQ units (official ThinQ Connect API) and with any brand exposed as a climate entity in Home Assistant (Samsung, Midea, Gree, Daikin, Tuya and others).\n\nAccess tokens are stored in the GNOME Keyring. The extension talks only to the LG ThinQ cloud or to your Home Assistant server.",
+  "shell-version": ["47", "48", "49", "50"],
+  "settings-schema": "org.gnome.shell.extensions.brisa",
+  "gettext-domain": "brisa@lciarallo.github.io",
+  "url": "https://github.com/Lciarallo/brisa"
+}

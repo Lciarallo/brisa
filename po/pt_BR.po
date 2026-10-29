@@ -1,0 +1,514 @@
+# Brazilian Portuguese translation for Brisa.
+# SPDX-License-Identifier: GPL-3.0-or-later
+msgid ""
+msgstr ""
+"Project-Id-Version: Brisa\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Cool"
+msgstr "Gelar"
+
+msgid "Heat"
+msgstr "Aquecer"
+
+msgid "Dry"
+msgstr "Secar"
+
+msgid "Fan"
+msgstr "Ventilar"
+
+msgid "Auto"
+msgstr "Auto"
+
+msgid "Heat/Cool"
+msgstr "Aquecer/Gelar"
+
+msgid "Eco"
+msgstr "Eco"
+
+msgid "Purify"
+msgstr "Purificar"
+
+msgid "Aroma"
+msgstr "Aroma"
+
+msgid "Very low"
+msgstr "Muito baixa"
+
+msgid "Quiet"
+msgstr "Silenciosa"
+
+msgid "Low"
+msgstr "Baixa"
+
+msgid "Medium-low"
+msgstr "Média-baixa"
+
+msgid "Medium"
+msgstr "Média"
+
+msgid "Medium-high"
+msgstr "Média-alta"
+
+msgid "High"
+msgstr "Alta"
+
+msgid "Turbo"
+msgstr "Turbo"
+
+msgid "Natural"
+msgstr "Natural"
+
+msgid "On"
+msgstr "Ligado"
+
+msgid "Off"
+msgstr "Desligado"
+
+msgid "Always"
+msgstr "Sempre"
+
+msgid "While running"
+msgstr "Durante o uso"
+
+msgid "Good"
+msgstr "Boa"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Poor"
+msgstr "Ruim"
+
+msgid "Very poor"
+msgstr "Muito ruim"
+
+msgid "Vertical"
+msgstr "Vertical"
+
+msgid "Horizontal"
+msgstr "Horizontal"
+
+msgid "Both"
+msgstr "Ambos"
+
+msgid "Swing"
+msgstr "Oscilação"
+
+msgid "Boost"
+msgstr "Turbo"
+
+msgid "Sleep"
+msgstr "Sono"
+
+msgid "Comfort"
+msgstr "Conforto"
+
+msgid "Away"
+msgstr "Ausente"
+
+msgid "Home"
+msgstr "Em casa"
+
+msgid "None"
+msgstr "Nenhum"
+
+msgid "Yes"
+msgstr "Sim"
+
+msgid "No"
+msgstr "Não"
+
+msgid "%d h"
+msgstr "%d h"
+
+msgid "A/C"
+msgstr "Ar"
+
+msgid "Loading…"
+msgstr "Carregando…"
+
+msgid "Air conditioner"
+msgstr "Ar-condicionado"
+
+msgid "Set up connection…"
+msgstr "Configurar conexão…"
+
+msgid "Refresh"
+msgstr "Atualizar"
+
+msgid "Settings"
+msgstr "Configurações"
+
+msgid "Not configured"
+msgstr "Não configurado"
+
+msgid "Error"
+msgstr "Erro"
+
+msgid "Lower temperature"
+msgstr "Diminuir temperatura"
+
+msgid "Raise temperature"
+msgstr "Aumentar temperatura"
+
+msgid "Fan speed"
+msgstr "Ventilação"
+
+msgid "Preset"
+msgstr "Predefinição"
+
+msgid "Timers"
+msgstr "Timers"
+
+msgid "Previous"
+msgstr "Anterior"
+
+msgid "Next"
+msgstr "Próximo"
+
+msgid "Sensors"
+msgstr "Sensores"
+
+msgid "Room temperature"
+msgstr "Temperatura ambiente"
+
+msgid "Humidity"
+msgstr "Umidade"
+
+msgid "Idle — room is at %s %s"
+msgstr "Em pausa — ambiente já está em %s %s"
+
+msgid "Cooling to %s %s"
+msgstr "Gelando até %s %s"
+
+msgid "Heating to %s %s"
+msgstr "Aquecendo até %s %s"
+
+msgid "Removing humidity"
+msgstr "Retirando umidade do ar"
+
+msgid "Circulating air"
+msgstr "Circulando o ar"
+
+msgid "Keeping %s %s"
+msgstr "Mantendo %s %s"
+
+msgid "Room: %s %s"
+msgstr "Ambiente: %s %s"
+
+msgid "Sending…"
+msgstr "Enviando…"
+
+msgid "Could not read the keyring: %s"
+msgstr "Não foi possível ler o chaveiro: %s"
+
+msgid "Add your access token in the settings"
+msgstr "Adicione seu token de acesso nas configurações"
+
+msgid "No air conditioner found in this account"
+msgstr "Nenhum ar-condicionado encontrado nesta conta"
+
+msgid "Connection"
+msgstr "Conexão"
+
+msgid "Air conditioner source"
+msgstr "Origem do ar-condicionado"
+
+msgid "LG units connect straight to the LG ThinQ cloud. Other brands work through a Home Assistant server."
+msgstr "Aparelhos LG conectam direto na nuvem LG ThinQ. Outras marcas funcionam por meio de um servidor Home Assistant."
+
+msgid "Connect with"
+msgstr "Conectar com"
+
+msgid "LG ThinQ"
+msgstr "LG ThinQ"
+
+msgid "Create a Personal Access Token with the same account used in the ThinQ app, allowing it to list devices, read their status and control them."
+msgstr "Crie um Personal Access Token com a mesma conta do app ThinQ, permitindo listar aparelhos, ler o estado e controlá-los."
+
+msgid "Create a token on the LG ThinQ website"
+msgstr "Criar um token no site da LG ThinQ"
+
+msgid "Account country (two letters, e.g. BR)"
+msgstr "País da conta (duas letras, ex.: BR)"
+
+msgid "Invalid country code"
+msgstr "Código de país inválido"
+
+msgid "Home Assistant"
+msgstr "Home Assistant"
+
+msgid "Any climate entity works. Create a long-lived access token in your Home Assistant profile, under Security."
+msgstr "Qualquer entidade climate funciona. Crie um token de acesso de longa duração no seu perfil do Home Assistant, em Segurança."
+
+msgid "How to create a long-lived token"
+msgstr "Como criar um token de longa duração"
+
+msgid "Server address, e.g. homeassistant.local:8123 with https"
+msgstr "Endereço do servidor, ex.: homeassistant.local:8123 com https"
+
+msgid "Unencrypted connection"
+msgstr "Conexão sem criptografia"
+
+msgid "With http:// the token travels in clear text on your local network. Prefer https://."
+msgstr "Com http:// o token trafega sem criptografia na sua rede local. Prefira https://."
+
+msgid "Access token"
+msgstr "Token de acesso"
+
+msgid "The token is stored in the GNOME Keyring, never in plain-text settings."
+msgstr "O token fica guardado no Chaveiro do GNOME, nunca em configurações de texto puro."
+
+msgid "Saved token"
+msgstr "Token salvo"
+
+msgid "Remove"
+msgstr "Remover"
+
+msgid "Paste a new token"
+msgstr "Colar um novo token"
+
+msgid "Stored in the keyring"
+msgstr "Guardado no chaveiro"
+
+msgid "Not set"
+msgstr "Não definido"
+
+msgid "That does not look like a valid token"
+msgstr "Isso não parece um token válido"
+
+msgid "Token saved in the keyring"
+msgstr "Token salvo no chaveiro"
+
+msgid "Could not save the token: %s"
+msgstr "Não foi possível salvar o token: %s"
+
+msgid "Token removed"
+msgstr "Token removido"
+
+msgid "Search the account and pick the unit to control."
+msgstr "Busque na conta e escolha o aparelho a controlar."
+
+msgid "Search"
+msgstr "Buscar"
+
+msgid "Selected"
+msgstr "Selecionado"
+
+msgid "Automatic (first one found)"
+msgstr "Automático (o primeiro encontrado)"
+
+msgid "Save an access token first"
+msgstr "Salve um token de acesso primeiro"
+
+msgid "Selected: %s"
+msgstr "Selecionado: %s"
+
+msgid "Connection failed"
+msgstr "Falha na conexão"
+
+msgid "Use the first one found"
+msgstr "Usar o primeiro encontrado"
+
+msgid "Behavior"
+msgstr "Comportamento"
+
+msgid "Appearance"
+msgstr "Aparência"
+
+msgid "Live animation"
+msgstr "Animação ao vivo"
+
+msgid "Shows what the unit is doing while the menu is open"
+msgstr "Mostra o que o aparelho está fazendo enquanto o menu está aberto"
+
+msgid "Temperature in the top bar"
+msgstr "Temperatura na barra superior"
+
+msgid "Shown next to the icon while the unit is on"
+msgstr "Aparece ao lado do ícone enquanto o aparelho está ligado"
+
+msgid "Updates"
+msgstr "Atualizações"
+
+msgid "Cloud APIs have rate limits; very short intervals may get the token blocked for a while."
+msgstr "As APIs na nuvem têm limite de chamadas; intervalos muito curtos podem bloquear o token por um tempo."
+
+msgid "Refresh every (seconds)"
+msgstr "Atualizar a cada (segundos)"
+
+msgid "Privacy"
+msgstr "Privacidade"
+
+msgid "Brisa only talks to the LG ThinQ cloud or to your Home Assistant server. It has no telemetry and keeps no logs of your device."
+msgstr "A Brisa só conversa com a nuvem LG ThinQ ou com o seu servidor Home Assistant. Não tem telemetria e não guarda registros do seu aparelho."
+
+msgid "Project page and source code"
+msgstr "Página do projeto e código-fonte"
+
+msgid "Invalid server address"
+msgstr "Endereço de servidor inválido"
+
+msgid "Use an http:// or https:// address"
+msgstr "Use um endereço http:// ou https://"
+
+msgid "The address must not contain credentials, query or fragment"
+msgstr "O endereço não pode conter credenciais, parâmetros ou fragmento"
+
+msgid "Use https:// for servers outside your local network"
+msgstr "Use https:// para servidores fora da sua rede local"
+
+msgid "The access token is invalid or expired"
+msgstr "O token de acesso é inválido ou expirou"
+
+msgid "Device not found in this account"
+msgstr "Aparelho não encontrado nesta conta"
+
+msgid "Home Assistant request failed"
+msgstr "Falha na requisição ao Home Assistant"
+
+msgid "Invalid device id"
+msgstr "ID de aparelho inválido"
+
+msgid "Horizontal swing"
+msgstr "Oscilação horizontal"
+
+msgid "Air direction"
+msgstr "Direção do vento"
+
+msgid "Target humidity"
+msgstr "Umidade alvo"
+
+msgid "Features"
+msgstr "Recursos"
+
+msgid "The air conditioner is offline"
+msgstr "O ar-condicionado está offline"
+
+msgid "Not supported"
+msgstr "Não suportado"
+
+msgid "Home Assistant (any brand)"
+msgstr "Home Assistant (qualquer marca)"
+
+msgid "The token lacks permission for this action"
+msgstr "O token não tem permissão para esta ação"
+
+msgid "Too many requests, try again later"
+msgstr "Muitas requisições, tente mais tarde"
+
+msgid "Country not supported by LG ThinQ"
+msgstr "País não suportado pela LG ThinQ"
+
+msgid "The air conditioner did not respond"
+msgstr "O ar-condicionado não respondeu"
+
+msgid "Remote control is disabled on the unit"
+msgstr "O controle remoto está desativado no aparelho"
+
+msgid "Turn the air conditioner on first"
+msgstr "Ligue o ar-condicionado primeiro"
+
+msgid "Not available in the current mode"
+msgstr "Indisponível no modo atual"
+
+msgid "Not available in the current state"
+msgstr "Indisponível no estado atual"
+
+msgid "Air purification"
+msgstr "Purificação do ar"
+
+msgid "Energy saving"
+msgstr "Economia de energia"
+
+msgid "Display light"
+msgstr "Luz do display"
+
+msgid "Wind strength"
+msgstr "Intensidade do vento"
+
+msgid "Vertical swing"
+msgstr "Oscilação vertical"
+
+msgid "Air guide"
+msgstr "Guia de ar"
+
+msgid "Auto fit"
+msgstr "Ajuste automático"
+
+msgid "Concentrated wind"
+msgstr "Vento concentrado"
+
+msgid "Forest wind"
+msgstr "Vento floresta"
+
+msgid "High ceiling"
+msgstr "Teto alto"
+
+msgid "Long reach"
+msgstr "Longo alcance"
+
+msgid "Gentle wind"
+msgstr "Vento suave"
+
+msgid "Swirl wind"
+msgstr "Vento em espiral"
+
+msgid "Air monitoring"
+msgstr "Monitoramento do ar"
+
+msgid "PM1"
+msgstr "PM1"
+
+msgid "PM2.5"
+msgstr "PM2,5"
+
+msgid "PM10"
+msgstr "PM10"
+
+msgid "Odor"
+msgstr "Odor"
+
+msgid "Odor level"
+msgstr "Nível de odor"
+
+msgid "Total pollution"
+msgstr "Poluição total"
+
+msgid "Air quality"
+msgstr "Qualidade do ar"
+
+msgid "Filter usage"
+msgstr "Uso do filtro"
+
+msgid "Filter lifetime"
+msgstr "Vida útil do filtro"
+
+msgid "Filter remaining"
+msgstr "Filtro restante"
+
+msgid "Dual setpoint"
+msgstr "Temperatura dupla"
+
+msgid "LG ThinQ request failed"
+msgstr "Falha na requisição à LG ThinQ"
+
+msgid "Sleep timer"
+msgstr "Timer de sono"
+
+msgid "Turn off in"
+msgstr "Desligar em"
+
+msgid "Turn on in"
+msgstr "Ligar em"
+
+msgid "Turn on at"
+msgstr "Ligar às"
+
+msgid "Turn off at"
+msgstr "Desligar às"

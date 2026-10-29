@@ -1,0 +1,81 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+
+.brisa-animation {
+  height: 112px;
+  min-width: 260px;
+}
+
+.brisa-caption {
+  font-size: 0.9em;
+  font-weight: bold;
+  margin-top: 2px;
+}
+
+.brisa-message {
+  color: #f66151;
+}
+
+.brisa-chips {
+  spacing: 4px;
+  padding: 2px 0;
+}
+
+.brisa-chip {
+  border-radius: 14px;
+  padding: 6px 2px;
+  background-color: rgba(127, 127, 127, 0.12);
+}
+
+.brisa-chip:hover,
+.brisa-chip:focus {
+  background-color: rgba(127, 127, 127, 0.24);
+}
+
+.brisa-chip:checked {
+  background-color: -st-accent-color;
+  color: -st-accent-fg-color;
+}
+
+.brisa-chip-label {
+  font-size: 0.8em;
+  margin-top: 2px;
+}
+
+.brisa-stepper-box {
+  spacing: 6px;
+}
+
+.brisa-stepper-big .brisa-stepper-box {
+  spacing: 22px;
+}
+
+.brisa-value {
+  min-width: 6.5em;
+  text-align: center;
+}
+
+.brisa-value-big {
+  font-size: 1.8em;
+  font-weight: 800;
+  min-width: 4.5em;
+  text-align: center;
+}
+
+.brisa-step-button {
+  border-radius: 99px;
+  padding: 8px;
+}
+
+.brisa-info-value {
+  font-weight: bold;
+}
+
+.brisa-panel-label {
+  margin-left: 2px;
+}
+
+.brisa-disabled,
+.brisa-disabled .brisa-value,
+.brisa-disabled .brisa-value-big {
+  color: rgba(127, 127, 127, 0.75);
+}

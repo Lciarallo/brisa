@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.brisa" path="/org/gnome/shell/extensions/brisa/">
+    <key name="provider" type="s">
+      <choices>
+        <choice value="thinq"/>
+        <choice value="homeassistant"/>
+      </choices>
+      <default>'thinq'</default>
+      <summary>Cloud or server used to reach the air conditioner</summary>
+    </key>
+    <key name="device-id" type="s">
+      <default>''</default>
+      <summary>Selected device (empty = first air conditioner found)</summary>
+    </key>
+    <key name="device-name" type="s">
+      <default>''</default>
+      <summary>Display name of the selected device</summary>
+    </key>
+    <key name="thinq-country" type="s">
+      <default>'BR'</default>
+      <summary>Country code of the LG account (ISO 3166-1 alpha-2)</summary>
+    </key>
+    <key name="thinq-client-id" type="s">
+      <default>''</default>
+      <summary>Random client id sent to LG ThinQ</summary>
+    </key>
+    <key name="ha-url" type="s">
+      <default>''</default>
+      <summary>Home Assistant server address</summary>
+    </key>
+    <key name="token-revision" type="u">
+      <default>0</default>
+      <summary>Bumped by the preferences when the keyring token changes</summary>
+    </key>
+    <key name="poll-interval" type="u">
+      <range min="15" max="3600"/>
+      <default>60</default>
+      <summary>Refresh interval in seconds</summary>
+    </key>
+    <key name="show-panel-temperature" type="b">
+      <default>true</default>
+      <summary>Show the target temperature in the top bar while the unit is on</summary>
+    </key>
+    <key name="animate" type="b">
+      <default>true</default>
+      <summary>Show the live air conditioner animation</summary>
+    </key>
+  </schema>
+</schemalist>
