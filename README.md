@@ -104,6 +104,10 @@ Layout: `providers/` (LG ThinQ, Home Assistant), `lib/` (HTTP and keyring), `ui/
 
 To add a provider, implement `listDevices`, `open` (returns capabilities), `getState` and the `set*` methods, then register it in `providers/index.js`.
 
+## Contributing
+
+Pull requests, translations and device reports are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md). Questions and ideas go to [Discussions](https://github.com/Lciarallo/brisa/discussions).
+
 ## License
 
 Copyright © 2026 Luiz Eduardo Ciarallo.

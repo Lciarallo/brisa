@@ -1,0 +1,40 @@
+name: Bug report
+description: Something does not work as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Never paste access tokens.** If you found a security issue, use *Security → Report a vulnerability* instead.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead? The message shown in the menu helps.
+    validations:
+      required: true
+  - type: dropdown
+    id: provider
+    attributes:
+      label: Provider
+      options: [LG ThinQ, Home Assistant]
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Air conditioner model
+      placeholder: e.g. LG RAC_056905_WW, or the Home Assistant integration name
+  - type: input
+    id: gnome
+    attributes:
+      label: GNOME and distribution
+      placeholder: e.g. GNOME 50, Fedora 44
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Output of `journalctl --user -b -o cat /usr/bin/gnome-shell | grep -i brisa`. Check that it contains no token.
+      render: text

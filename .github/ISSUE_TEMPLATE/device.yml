@@ -1,0 +1,42 @@
+name: New device / missing control
+description: Your air conditioner works but a function is missing, mislabelled or wrong
+labels: [device]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Brisa builds its menu from what the unit reports. This report helps it handle more models.
+        **Never paste access tokens or device ids.**
+  - type: dropdown
+    id: provider
+    attributes:
+      label: Provider
+      options: [LG ThinQ, Home Assistant]
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model
+    validations:
+      required: true
+  - type: textarea
+    id: detected
+    attributes:
+      label: Detected functions
+      description: Copy the list from **Settings → Brisa → Detected functions**.
+    validations:
+      required: true
+  - type: textarea
+    id: missing
+    attributes:
+      label: What is missing or wrong?
+      description: e.g. "the official app has Jet Cool, Brisa doesn't show it", or "Fan speed 'POWER' should be called Turbo".
+    validations:
+      required: true
+  - type: textarea
+    id: profile
+    attributes:
+      label: Device profile (optional, for maintainers)
+      description: For LG, run `gjs -m tools/dump-profile.js` from the repository and paste the output. It redacts ids and never prints the token.
+      render: json

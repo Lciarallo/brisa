@@ -1,0 +1,46 @@
+name: Check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends gettext libglib2.0-bin
+
+      - name: JavaScript syntax
+        run: |
+          status=0
+          for f in $(git ls-files '*.js' | grep -v '^docs/'); do
+            node --check --input-type=module < "$f" || { echo "::error file=$f::syntax error"; status=1; }
+          done
+          exit $status
+
+      - name: Forbidden imports and patterns (extensions.gnome.org rules)
+        run: |
+          ext=brisa@lciarallo.github.io
+          ! grep -nE "gi://(Gtk|Gdk|Adw)" $ext/extension.js $ext/ui/*.js || { echo "::error::Shell process must not import Gtk/Gdk/Adw"; exit 1; }
+          ! grep -nE "gi://(St|Clutter|Meta|Shell)" $ext/prefs.js || { echo "::error::prefs.js must not import St/Clutter/Meta/Shell"; exit 1; }
+          ! grep -rnE "imports\.(lang|mainloop|byteArray)|\beval\(" $ext || { echo "::error::deprecated module or eval"; exit 1; }
+
+      - name: GSettings schema
+        run: glib-compile-schemas --strict --dry-run brisa@lciarallo.github.io/schemas
+
+      - name: Translations
+        run: for po in po/*.po; do msgfmt --check -o /dev/null "$po"; done
+
+      - name: metadata.json
+        run: python3 -c "import json; m=json.load(open('brisa@lciarallo.github.io/metadata.json')); assert m['uuid']=='brisa@lciarallo.github.io' and m['settings-schema'] and m['shell-version']"
+
+      - name: No secrets committed
+        run: |
+          ! git grep -nE "thinqpat_[A-Za-z0-9]{10,}|ghp_[A-Za-z0-9]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY" || { echo "::error::possible secret committed"; exit 1; }

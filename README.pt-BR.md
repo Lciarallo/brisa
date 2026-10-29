@@ -98,6 +98,10 @@ make pot        # atualiza o .pot e mescla as traduções
 make pack       # gera o zip para a loja em dist/
 ```
 
+## Como contribuir
+
+Pull requests, traduções e relatos de aparelhos são bem-vindos. Veja o [CONTRIBUTING.md](CONTRIBUTING.md); dúvidas e ideias vão para as [Discussões](https://github.com/Lciarallo/brisa/discussions).
+
 ## Licença
 
 Copyright © 2026 Luiz Eduardo Ciarallo. Software livre sob a **GNU GPL v3.0 ou posterior** ([LICENSE](LICENSE)).
