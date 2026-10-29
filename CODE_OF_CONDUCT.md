@@ -13,4 +13,4 @@ In short:
 
 ## Reporting
 
-If someone breaks the code of conduct, email the maintainer at **luizeduardociarallo@gmail.com** with what happened, and links if you can. Reports are kept confidential. Maintainers may remove comments, commits or contributions that violate it, and may block repeat offenders.
+If someone breaks the code of conduct, report it privately to the maintainer ([@Lciarallo](https://github.com/Lciarallo)) through [a private report](https://github.com/Lciarallo/brisa/security/advisories/new), or use GitHub's *Report content* option on the comment. Say what happened and include links if you can. Reports are kept confidential. Maintainers may remove comments, commits or contributions that violate it, and may block repeat offenders.
