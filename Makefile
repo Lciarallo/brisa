@@ -18,7 +18,7 @@ locale:
 	done
 
 pot:
-	xgettext --from-code=UTF-8 -L JavaScript -k_ -kN_ --package-name=Brisa \
+	xgettext --from-code=UTF-8 -L JavaScript -k_ -kN_ -ktranslatable --package-name=Brisa \
 		-o po/$(UUID).pot $(SRC)/*.js $(SRC)/*/*.js
 	@for l in $(LINGUAS); do msgmerge -U --backup=none po/$$l.po po/$(UUID).pot; done
 

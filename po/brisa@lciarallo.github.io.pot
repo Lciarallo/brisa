@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Brisa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 02:56-0300\n"
+"POT-Creation-Date: 2026-10-29 03:37-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,8 +21,8 @@ msgstr ""
 #: brisa@lciarallo.github.io/extension.js:40
 #: brisa@lciarallo.github.io/extension.js:214
 #: brisa@lciarallo.github.io/extension.js:247
-#: brisa@lciarallo.github.io/lib/labels.js:33
 #: brisa@lciarallo.github.io/lib/labels.js:35
+#: brisa@lciarallo.github.io/lib/labels.js:37
 msgid "Off"
 msgstr ""
 
@@ -63,7 +63,7 @@ msgid "Not configured"
 msgstr ""
 
 #: brisa@lciarallo.github.io/extension.js:88
-#: brisa@lciarallo.github.io/lib/labels.js:40
+#: brisa@lciarallo.github.io/lib/labels.js:42
 msgid "Error"
 msgstr ""
 
@@ -82,7 +82,7 @@ msgstr ""
 
 #: brisa@lciarallo.github.io/extension.js:145
 #: brisa@lciarallo.github.io/prefs.js:288
-#: brisa@lciarallo.github.io/lib/labels.js:47
+#: brisa@lciarallo.github.io/lib/labels.js:49
 msgid "Swing"
 msgstr ""
 
@@ -155,17 +155,17 @@ msgstr ""
 msgid "Sending…"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:394
+#: brisa@lciarallo.github.io/extension.js:406
 #: brisa@lciarallo.github.io/prefs.js:136
 #, javascript-format
 msgid "Could not read the keyring: %s"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:400
+#: brisa@lciarallo.github.io/extension.js:412
 msgid "Add your access token in the settings"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:424
+#: brisa@lciarallo.github.io/extension.js:436
 #: brisa@lciarallo.github.io/prefs.js:205
 #: brisa@lciarallo.github.io/prefs.js:274
 msgid "No air conditioner found in this account"
@@ -404,153 +404,153 @@ msgstr ""
 msgid "Project page and source code"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:10
+#: brisa@lciarallo.github.io/lib/labels.js:12
 msgid "Cool"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:11
+#: brisa@lciarallo.github.io/lib/labels.js:13
 msgid "Heat"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:12
+#: brisa@lciarallo.github.io/lib/labels.js:14
 msgid "Dry"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:13
+#: brisa@lciarallo.github.io/lib/labels.js:15
 msgid "Fan"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:14
+#: brisa@lciarallo.github.io/lib/labels.js:16
 msgid "Auto"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:15
+#: brisa@lciarallo.github.io/lib/labels.js:17
 msgid "Heat/Cool"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:16
-#: brisa@lciarallo.github.io/lib/labels.js:48
+#: brisa@lciarallo.github.io/lib/labels.js:18
+#: brisa@lciarallo.github.io/lib/labels.js:50
 msgid "Eco"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:17
+#: brisa@lciarallo.github.io/lib/labels.js:19
 msgid "Purify"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:18
+#: brisa@lciarallo.github.io/lib/labels.js:20
 msgid "Aroma"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:19
+#: brisa@lciarallo.github.io/lib/labels.js:21
 msgid "Very low"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:20
-#: brisa@lciarallo.github.io/lib/labels.js:21
+#: brisa@lciarallo.github.io/lib/labels.js:22
+#: brisa@lciarallo.github.io/lib/labels.js:23
 msgid "Quiet"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:22
+#: brisa@lciarallo.github.io/lib/labels.js:24
 msgid "Low"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:23
+#: brisa@lciarallo.github.io/lib/labels.js:25
 msgid "Medium-low"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:24
-#: brisa@lciarallo.github.io/lib/labels.js:25
 #: brisa@lciarallo.github.io/lib/labels.js:26
+#: brisa@lciarallo.github.io/lib/labels.js:27
+#: brisa@lciarallo.github.io/lib/labels.js:28
 msgid "Medium"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:27
+#: brisa@lciarallo.github.io/lib/labels.js:29
 msgid "Medium-high"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:28
+#: brisa@lciarallo.github.io/lib/labels.js:30
 msgid "High"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:29
-#: brisa@lciarallo.github.io/lib/labels.js:30
+#: brisa@lciarallo.github.io/lib/labels.js:31
+#: brisa@lciarallo.github.io/lib/labels.js:32
 msgid "Turbo"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:31
+#: brisa@lciarallo.github.io/lib/labels.js:33
 msgid "Natural"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:32
 #: brisa@lciarallo.github.io/lib/labels.js:34
+#: brisa@lciarallo.github.io/lib/labels.js:36
 msgid "On"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:36
+#: brisa@lciarallo.github.io/lib/labels.js:38
 msgid "Always"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:37
+#: brisa@lciarallo.github.io/lib/labels.js:39
 msgid "While running"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:38
+#: brisa@lciarallo.github.io/lib/labels.js:40
 msgid "Good"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:39
+#: brisa@lciarallo.github.io/lib/labels.js:41
 msgid "Normal"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:41
+#: brisa@lciarallo.github.io/lib/labels.js:43
 msgid "Poor"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:42
+#: brisa@lciarallo.github.io/lib/labels.js:44
 msgid "Very poor"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:44
+#: brisa@lciarallo.github.io/lib/labels.js:46
 msgid "Vertical"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:45
+#: brisa@lciarallo.github.io/lib/labels.js:47
 msgid "Horizontal"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:46
+#: brisa@lciarallo.github.io/lib/labels.js:48
 msgid "Both"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:49
+#: brisa@lciarallo.github.io/lib/labels.js:51
 msgid "Boost"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:50
+#: brisa@lciarallo.github.io/lib/labels.js:52
 msgid "Sleep"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:51
+#: brisa@lciarallo.github.io/lib/labels.js:53
 msgid "Comfort"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:52
+#: brisa@lciarallo.github.io/lib/labels.js:54
 msgid "Away"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:53
+#: brisa@lciarallo.github.io/lib/labels.js:55
 msgid "Home"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:54
+#: brisa@lciarallo.github.io/lib/labels.js:56
 msgid "None"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:59
+#: brisa@lciarallo.github.io/lib/labels.js:70
 msgid "Yes"
 msgstr ""
 
-#: brisa@lciarallo.github.io/lib/labels.js:59
+#: brisa@lciarallo.github.io/lib/labels.js:70
 msgid "No"
 msgstr ""
 

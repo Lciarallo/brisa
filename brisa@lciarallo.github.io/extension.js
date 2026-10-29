@@ -265,6 +265,15 @@ class BrisaToggle extends QuickMenuToggle {
 
     destroy() {
         this.menu.disconnect(this._openId);
+        // The menu would destroy these with itself; done explicitly for clarity.
+        this._dynamic.destroy();
+        this._message.destroy();
+        this._setupItem.destroy();
+        this._dynamic = null;
+        this._message = null;
+        this._setupItem = null;
+        this._updaters = [];
+        this._sensitives = [];
         super.destroy();
     }
 });
@@ -365,11 +374,14 @@ export default class BrisaExtension extends Extension {
     }
 
     _stop() {
-        for (const id of [this._pollId, this._delayId]) {
-            if (id)
-                GLib.source_remove(id);
+        if (this._pollId) {
+            GLib.source_remove(this._pollId);
+            this._pollId = 0;
         }
-        this._pollId = this._delayId = 0;
+        if (this._delayId) {
+            GLib.source_remove(this._delayId);
+            this._delayId = 0;
+        }
         this._cancellable?.cancel();
         this._cancellable = null;
         this._provider?.destroy();

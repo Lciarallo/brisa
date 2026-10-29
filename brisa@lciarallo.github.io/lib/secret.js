@@ -5,13 +5,17 @@
 
 import Secret from 'gi://Secret';
 
-const SCHEMA = new Secret.Schema('io.github.lciarallo.Brisa', Secret.SchemaFlags.NONE, {
-    provider: Secret.SchemaAttributeType.STRING,
-});
+// Built on first use, never at import time (extensions must not create
+// objects before enable()).
+function schema() {
+    return new Secret.Schema('io.github.lciarallo.Brisa', Secret.SchemaFlags.NONE, {
+        provider: Secret.SchemaAttributeType.STRING,
+    });
+}
 
 export function lookupToken(provider, cancellable = null) {
     return new Promise((resolve, reject) => {
-        Secret.password_lookup(SCHEMA, {provider}, cancellable, (_src, res) => {
+        Secret.password_lookup(schema(), {provider}, cancellable, (_src, res) => {
             try {
                 resolve(Secret.password_lookup_finish(res));
             } catch (e) {
@@ -23,7 +27,7 @@ export function lookupToken(provider, cancellable = null) {
 
 export function storeToken(provider, label, token, cancellable = null) {
     return new Promise((resolve, reject) => {
-        Secret.password_store(SCHEMA, {provider}, Secret.COLLECTION_DEFAULT, label, token,
+        Secret.password_store(schema(), {provider}, Secret.COLLECTION_DEFAULT, label, token,
             cancellable, (_src, res) => {
                 try {
                     resolve(Secret.password_store_finish(res));
@@ -36,7 +40,7 @@ export function storeToken(provider, label, token, cancellable = null) {
 
 export function clearToken(provider, cancellable = null) {
     return new Promise((resolve, reject) => {
-        Secret.password_clear(SCHEMA, {provider}, cancellable, (_src, res) => {
+        Secret.password_clear(schema(), {provider}, cancellable, (_src, res) => {
             try {
                 resolve(Secret.password_clear_finish(res));
             } catch (e) {

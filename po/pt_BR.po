@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Brisa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 02:56-0300\n"
+"POT-Creation-Date: 2026-10-29 03:37-0300\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,8 +15,8 @@ msgstr ""
 #: brisa@lciarallo.github.io/extension.js:40
 #: brisa@lciarallo.github.io/extension.js:214
 #: brisa@lciarallo.github.io/extension.js:247
-#: brisa@lciarallo.github.io/lib/labels.js:33
 #: brisa@lciarallo.github.io/lib/labels.js:35
+#: brisa@lciarallo.github.io/lib/labels.js:37
 msgid "Off"
 msgstr "Desligado"
 
@@ -57,7 +57,7 @@ msgid "Not configured"
 msgstr "Não configurado"
 
 #: brisa@lciarallo.github.io/extension.js:88
-#: brisa@lciarallo.github.io/lib/labels.js:40
+#: brisa@lciarallo.github.io/lib/labels.js:42
 msgid "Error"
 msgstr "Erro"
 
@@ -76,7 +76,7 @@ msgstr "Ventilação"
 
 #: brisa@lciarallo.github.io/extension.js:145
 #: brisa@lciarallo.github.io/prefs.js:288
-#: brisa@lciarallo.github.io/lib/labels.js:47
+#: brisa@lciarallo.github.io/lib/labels.js:49
 msgid "Swing"
 msgstr "Oscilação"
 
@@ -149,17 +149,17 @@ msgstr "Ambiente: %s %s"
 msgid "Sending…"
 msgstr "Enviando…"
 
-#: brisa@lciarallo.github.io/extension.js:394
+#: brisa@lciarallo.github.io/extension.js:406
 #: brisa@lciarallo.github.io/prefs.js:136
 #, javascript-format
 msgid "Could not read the keyring: %s"
 msgstr "Não foi possível ler o chaveiro: %s"
 
-#: brisa@lciarallo.github.io/extension.js:400
+#: brisa@lciarallo.github.io/extension.js:412
 msgid "Add your access token in the settings"
 msgstr "Adicione seu token de acesso nas configurações"
 
-#: brisa@lciarallo.github.io/extension.js:424
+#: brisa@lciarallo.github.io/extension.js:436
 #: brisa@lciarallo.github.io/prefs.js:205
 #: brisa@lciarallo.github.io/prefs.js:274
 msgid "No air conditioner found in this account"
@@ -249,7 +249,9 @@ msgstr "Token de acesso"
 
 #: brisa@lciarallo.github.io/prefs.js:118
 msgid "The token is stored in the GNOME Keyring, never in plain-text settings."
-msgstr "O token fica guardado no Chaveiro do GNOME, nunca em configurações de texto puro."
+msgstr ""
+"O token fica guardado no Chaveiro do GNOME, nunca em configurações de texto "
+"puro."
 
 #: brisa@lciarallo.github.io/prefs.js:121
 msgid "Saved token"
@@ -330,7 +332,8 @@ msgstr "Funções detectadas"
 #: brisa@lciarallo.github.io/prefs.js:244
 msgid ""
 "Read from the air conditioner itself. The menu shows exactly these controls."
-msgstr "Lidas do próprio ar-condicionado. O menu mostra exatamente estes controles."
+msgstr ""
+"Lidas do próprio ar-condicionado. O menu mostra exatamente estes controles."
 
 #: brisa@lciarallo.github.io/prefs.js:246
 msgid "Detect"
@@ -410,153 +413,153 @@ msgstr ""
 msgid "Project page and source code"
 msgstr "Página do projeto e código-fonte"
 
-#: brisa@lciarallo.github.io/lib/labels.js:10
+#: brisa@lciarallo.github.io/lib/labels.js:12
 msgid "Cool"
 msgstr "Gelar"
 
-#: brisa@lciarallo.github.io/lib/labels.js:11
+#: brisa@lciarallo.github.io/lib/labels.js:13
 msgid "Heat"
 msgstr "Aquecer"
 
-#: brisa@lciarallo.github.io/lib/labels.js:12
+#: brisa@lciarallo.github.io/lib/labels.js:14
 msgid "Dry"
 msgstr "Secar"
 
-#: brisa@lciarallo.github.io/lib/labels.js:13
+#: brisa@lciarallo.github.io/lib/labels.js:15
 msgid "Fan"
 msgstr "Ventilar"
 
-#: brisa@lciarallo.github.io/lib/labels.js:14
+#: brisa@lciarallo.github.io/lib/labels.js:16
 msgid "Auto"
 msgstr "Auto"
 
-#: brisa@lciarallo.github.io/lib/labels.js:15
+#: brisa@lciarallo.github.io/lib/labels.js:17
 msgid "Heat/Cool"
 msgstr "Aquecer/Gelar"
 
-#: brisa@lciarallo.github.io/lib/labels.js:16
-#: brisa@lciarallo.github.io/lib/labels.js:48
+#: brisa@lciarallo.github.io/lib/labels.js:18
+#: brisa@lciarallo.github.io/lib/labels.js:50
 msgid "Eco"
 msgstr "Eco"
 
-#: brisa@lciarallo.github.io/lib/labels.js:17
+#: brisa@lciarallo.github.io/lib/labels.js:19
 msgid "Purify"
 msgstr "Purificar"
 
-#: brisa@lciarallo.github.io/lib/labels.js:18
+#: brisa@lciarallo.github.io/lib/labels.js:20
 msgid "Aroma"
 msgstr "Aroma"
 
-#: brisa@lciarallo.github.io/lib/labels.js:19
+#: brisa@lciarallo.github.io/lib/labels.js:21
 msgid "Very low"
 msgstr "Muito baixa"
 
-#: brisa@lciarallo.github.io/lib/labels.js:20
-#: brisa@lciarallo.github.io/lib/labels.js:21
+#: brisa@lciarallo.github.io/lib/labels.js:22
+#: brisa@lciarallo.github.io/lib/labels.js:23
 msgid "Quiet"
 msgstr "Silenciosa"
 
-#: brisa@lciarallo.github.io/lib/labels.js:22
+#: brisa@lciarallo.github.io/lib/labels.js:24
 msgid "Low"
 msgstr "Baixa"
 
-#: brisa@lciarallo.github.io/lib/labels.js:23
+#: brisa@lciarallo.github.io/lib/labels.js:25
 msgid "Medium-low"
 msgstr "Média-baixa"
 
-#: brisa@lciarallo.github.io/lib/labels.js:24
-#: brisa@lciarallo.github.io/lib/labels.js:25
 #: brisa@lciarallo.github.io/lib/labels.js:26
+#: brisa@lciarallo.github.io/lib/labels.js:27
+#: brisa@lciarallo.github.io/lib/labels.js:28
 msgid "Medium"
 msgstr "Média"
 
-#: brisa@lciarallo.github.io/lib/labels.js:27
+#: brisa@lciarallo.github.io/lib/labels.js:29
 msgid "Medium-high"
 msgstr "Média-alta"
 
-#: brisa@lciarallo.github.io/lib/labels.js:28
+#: brisa@lciarallo.github.io/lib/labels.js:30
 msgid "High"
 msgstr "Alta"
 
-#: brisa@lciarallo.github.io/lib/labels.js:29
-#: brisa@lciarallo.github.io/lib/labels.js:30
+#: brisa@lciarallo.github.io/lib/labels.js:31
+#: brisa@lciarallo.github.io/lib/labels.js:32
 msgid "Turbo"
 msgstr "Turbo"
 
-#: brisa@lciarallo.github.io/lib/labels.js:31
+#: brisa@lciarallo.github.io/lib/labels.js:33
 msgid "Natural"
 msgstr "Natural"
 
-#: brisa@lciarallo.github.io/lib/labels.js:32
 #: brisa@lciarallo.github.io/lib/labels.js:34
+#: brisa@lciarallo.github.io/lib/labels.js:36
 msgid "On"
 msgstr "Ligado"
 
-#: brisa@lciarallo.github.io/lib/labels.js:36
+#: brisa@lciarallo.github.io/lib/labels.js:38
 msgid "Always"
 msgstr "Sempre"
 
-#: brisa@lciarallo.github.io/lib/labels.js:37
+#: brisa@lciarallo.github.io/lib/labels.js:39
 msgid "While running"
 msgstr "Durante o uso"
 
-#: brisa@lciarallo.github.io/lib/labels.js:38
+#: brisa@lciarallo.github.io/lib/labels.js:40
 msgid "Good"
 msgstr "Boa"
 
-#: brisa@lciarallo.github.io/lib/labels.js:39
+#: brisa@lciarallo.github.io/lib/labels.js:41
 msgid "Normal"
 msgstr "Normal"
 
-#: brisa@lciarallo.github.io/lib/labels.js:41
+#: brisa@lciarallo.github.io/lib/labels.js:43
 msgid "Poor"
 msgstr "Ruim"
 
-#: brisa@lciarallo.github.io/lib/labels.js:42
+#: brisa@lciarallo.github.io/lib/labels.js:44
 msgid "Very poor"
 msgstr "Muito ruim"
 
-#: brisa@lciarallo.github.io/lib/labels.js:44
+#: brisa@lciarallo.github.io/lib/labels.js:46
 msgid "Vertical"
 msgstr "Vertical"
 
-#: brisa@lciarallo.github.io/lib/labels.js:45
+#: brisa@lciarallo.github.io/lib/labels.js:47
 msgid "Horizontal"
 msgstr "Horizontal"
 
-#: brisa@lciarallo.github.io/lib/labels.js:46
+#: brisa@lciarallo.github.io/lib/labels.js:48
 msgid "Both"
 msgstr "Ambos"
 
-#: brisa@lciarallo.github.io/lib/labels.js:49
+#: brisa@lciarallo.github.io/lib/labels.js:51
 msgid "Boost"
 msgstr "Turbo"
 
-#: brisa@lciarallo.github.io/lib/labels.js:50
+#: brisa@lciarallo.github.io/lib/labels.js:52
 msgid "Sleep"
 msgstr "Sono"
 
-#: brisa@lciarallo.github.io/lib/labels.js:51
+#: brisa@lciarallo.github.io/lib/labels.js:53
 msgid "Comfort"
 msgstr "Conforto"
 
-#: brisa@lciarallo.github.io/lib/labels.js:52
+#: brisa@lciarallo.github.io/lib/labels.js:54
 msgid "Away"
 msgstr "Ausente"
 
-#: brisa@lciarallo.github.io/lib/labels.js:53
+#: brisa@lciarallo.github.io/lib/labels.js:55
 msgid "Home"
 msgstr "Em casa"
 
-#: brisa@lciarallo.github.io/lib/labels.js:54
+#: brisa@lciarallo.github.io/lib/labels.js:56
 msgid "None"
 msgstr "Nenhum"
 
-#: brisa@lciarallo.github.io/lib/labels.js:59
+#: brisa@lciarallo.github.io/lib/labels.js:70
 msgid "Yes"
 msgstr "Sim"
 
-#: brisa@lciarallo.github.io/lib/labels.js:59
+#: brisa@lciarallo.github.io/lib/labels.js:70
 msgid "No"
 msgstr "Não"
 
