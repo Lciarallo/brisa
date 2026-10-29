@@ -67,6 +67,7 @@ function messageId() {
 }
 
 const MODES = {COOL: 'cool', HEAT: 'heat', AIR_DRY: 'dry', FAN: 'fan', AUTO: 'auto'};
+const MODE_ORDER = ['cool', 'heat', 'dry', 'fan', 'auto'];
 const toMode = v => MODES[v] ?? v?.toLowerCase();
 const fromMode = (m, raw) => raw.find(v => toMode(v) === m) ?? m.toUpperCase();
 
@@ -121,6 +122,7 @@ const LABELS = {
     'filterInfo.filterLifetime': N_('Filter lifetime'),
     'filterInfo.filterRemainPercent': N_('Filter remaining'),
     'twoSetTemperature.twoSetEnabled': N_('Dual setpoint'),
+    'runState.currentState': N_('Status'),
 };
 
 const UNITS = {
@@ -128,7 +130,6 @@ const UNITS = {
     'airQualitySensor.PM2': ' µg/m³',
     'airQualitySensor.PM10': ' µg/m³',
     'filterInfo.usedTime': ' h',
-    'filterInfo.filterLifetime': ' h',
     'filterInfo.filterRemainPercent': '%',
 };
 
@@ -205,10 +206,19 @@ export class ThinQProvider {
         this._tempResource = p.temperatureInUnits ? 'temperatureInUnits' : 'temperature';
         this._extras.clear();
 
-        const range = writableValues(this._tempProfile.targetTemperature ?? this._tempProfile.coolTargetTemperature);
+        // Which modes accept a setpoint differs per model: many units only take
+        // coolTargetTemperature, so the stepper follows the current mode.
+        const modes = this._rawModes.map(toMode)
+            .sort((a, b) => (MODE_ORDER.indexOf(a) + 1 || 99) - (MODE_ORDER.indexOf(b) + 1 || 99));
+        const setpointModes = modes.filter(m => this._targetKey(m));
+        const anyKey = this._targetKey(setpointModes[0]);
+        const range = anyKey ? writableValues(this._tempProfile[anyKey]) : [];
         const caps = {
-            modes: this._rawModes.map(toMode),
-            temperature: range.length ? {min: range[0], max: range.at(-1), step: range[1] - range[0] || 1} : null,
+            modes,
+            temperature: range.length ? {
+                min: range[0], max: range.at(-1), step: range[1] - range[0] || 1,
+                modes: setpointModes.length === modes.length ? null : setpointModes,
+            } : null,
             unit: '°C',
             fans: isWritable(p.airFlow?.[this._fanKey]) ? writableValues(p.airFlow[this._fanKey]) : [],
             swings: [],
@@ -224,26 +234,38 @@ export class ThinQProvider {
         };
 
         // Timers (setters mirror air_conditioner.py; -1/-1 clears an absolute timer).
+        // Real profiles often declare the hours as a plain writable "number"
+        // and expose a "relative…Timer" enum whose only writable value is
+        // UNSET, which is how a running timer is cancelled.
         const timer = p.timer ?? {};
-        const hourValues = prop => [0, ...writableValues(prop).filter(h => h > 0)];
-        if (isWritable(p.sleepTimer?.relativeHourToStop)) {
-            addExtra({id: 'sleep', label: N_('Sleep timer'), kind: 'hours', group: N_('Timers'),
-                values: hourValues(p.sleepTimer.relativeHourToStop)},
-            s => s?.sleepTimer?.relativeHourToStop ?? 0,
-            h => ({sleepTimer: {relativeHourToStop: h, relativeMinuteToStop: 0}}));
-        }
-        if (isWritable(timer.relativeHourToStop)) {
-            addExtra({id: 'stop-in', label: N_('Turn off in'), kind: 'hours', group: N_('Timers'),
-                values: hourValues(timer.relativeHourToStop)},
-            s => s?.timer?.relativeHourToStop ?? 0,
-            h => ({timer: {relativeHourToStop: h}}));
-        }
-        if (isWritable(timer.relativeHourToStart)) {
-            addExtra({id: 'start-in', label: N_('Turn on in'), kind: 'hours', group: N_('Timers'),
-                values: hourValues(timer.relativeHourToStart)},
-            s => s?.timer?.relativeHourToStart ?? 0,
-            h => ({timer: {relativeHourToStart: h, relativeMinuteToStart: 0}}));
-        }
+        const hourValues = (prop, max) => {
+            const declared = writableValues(prop).filter(h => h > 0);
+            return [0, ...(declared.length ? declared : Array.from({length: max}, (_, i) => i + 1))];
+        };
+        const relative = (id, label, res, what, max) => {
+            const props = p[res] ?? {};
+            const hk = `relativeHourTo${what}`;
+            const mk = `relativeMinuteTo${what}`;
+            const flag = `relative${what}Timer`;
+            if (!isWritable(props[hk]))
+                return;
+            const canUnset = writableValues(props[flag]).includes('UNSET');
+            addExtra({id, label, kind: 'hours', group: N_('Timers'), values: hourValues(props[hk], max)},
+                s => {
+                    const r = s?.[res] ?? {};
+                    if (r[flag] === 'UNSET')
+                        return 0;
+                    return (r[hk] ?? 0) + ((r[mk] ?? 0) > 0 ? 1 : 0);
+                },
+                h => {
+                    if (h <= 0 && canUnset)
+                        return {[res]: {[flag]: 'UNSET'}};
+                    return {[res]: {[hk]: h, ...(isWritable(props[mk]) ? {[mk]: 0} : {})}};
+                });
+        };
+        relative('sleep', N_('Sleep timer'), 'sleepTimer', 'Stop', 7);
+        relative('stop-in', N_('Turn off in'), 'timer', 'Stop', 12);
+        relative('start-in', N_('Turn on in'), 'timer', 'Start', 12);
         for (const [what, label] of [['Start', N_('Turn on at')], ['Stop', N_('Turn off at')]]) {
             const hk = `absoluteHourTo${what}`;
             const mk = `absoluteMinuteTo${what}`;
@@ -292,10 +314,13 @@ export class ThinQProvider {
         return caps;
     }
 
+    // Writable setpoint for a mode, or null when that mode takes none.
     _targetKey(mode) {
         const byMode = {cool: 'coolTargetTemperature', heat: 'heatTargetTemperature', auto: 'autoTargetTemperature'};
         const key = byMode[mode];
-        return key && isWritable(this._tempProfile[key]) ? key : 'targetTemperature';
+        if (key && isWritable(this._tempProfile[key]))
+            return key;
+        return isWritable(this._tempProfile.targetTemperature) ? 'targetTemperature' : null;
     }
 
     async getState(cancellable = null) {
@@ -309,7 +334,7 @@ export class ThinQProvider {
         return {
             power: raw?.operation?.airConOperationMode === 'POWER_ON',
             mode,
-            target: t[this._targetKey(mode)] ?? t.targetTemperature ?? null,
+            target: t[this._targetKey(mode) ?? 'targetTemperature'] ?? t.targetTemperature ?? null,
             current: t.currentTemperature ?? null,
             humidity: raw?.airQualitySensor?.humidity ?? null,
             fan: raw?.airFlow?.[this._fanKey] ?? null,
@@ -317,6 +342,7 @@ export class ThinQProvider {
             preset: null,
             oscillating: !!(dir.rotateUpDown || dir.rotateLeftRight || dir.swirlWind),
             action: null,
+            setpoint: !!this._targetKey(mode),
             extras,
         };
     }
@@ -334,7 +360,10 @@ export class ThinQProvider {
     }
 
     setTarget(value, state) {
-        return this._control({[this._tempResource]: {[this._targetKey(state?.mode)]: value, unit: 'C'}});
+        const key = this._targetKey(state?.mode);
+        if (!key)
+            return Promise.reject(new ProviderError(N_('Not available in the current mode')));
+        return this._control({[this._tempResource]: {[key]: value, unit: 'C'}});
     }
 
     setFan(value) {

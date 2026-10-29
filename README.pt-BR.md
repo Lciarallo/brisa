@@ -33,7 +33,8 @@
   - economia de energia, luz do display e purificação;
   - timers (sono, *desligar em*, *ligar às*);
   - sensores (temperatura ambiente, umidade, PM2,5, vida do filtro).
-- **Janela de configurações**: escolha o provedor, salve o token, busque na conta e escolha o aparelho.
+- **Detecção automática das funções**: os controles vêm do que o próprio aparelho informa, inclusive limites por modo. Muitos ares LG só aceitam temperatura no modo Gelar, então o − / + fica desativado em Ventilar e Secar. A detecção roda de novo ao clicar em *Atualizar*, a cada 6 horas e quando o aparelho recusa um comando por não suportá-lo. No Home Assistant, ela segue o `supported_features` da entidade e reage assim que ele muda.
+- **Janela de configurações**: escolha o provedor, salve o token, busque na conta, escolha o aparelho e veja as **funções detectadas** antes de usar.
 - **Idiomas**: português do Brasil e inglês.
 
 <p align="center">

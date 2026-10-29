@@ -23,7 +23,8 @@
 - **Mode buttons**: picking a mode while the unit is off turns it on in that mode.
 - **Temperature stepper**: several clicks are grouped into a single request.
 - **Everything the unit supports**, read from the device itself: fan speed, swing, presets, air direction, energy saving, display light, purification, timers (sleep, *turn off in*, *turn on at*) and sensors (room temperature, humidity, PM2.5, filter life).
-- **Settings window**: pick the provider, store the token, search the account and choose the unit.
+- **Automatic capability detection**: controls come from what the unit itself reports. That includes per-mode limits: many LG units only take a setpoint in Cool mode, so the stepper is disabled in Fan and Dry. Detection runs again on *Refresh*, every 6 hours, and when the unit rejects a command as unsupported. For Home Assistant it follows the entity's `supported_features` and reacts as soon as they change.
+- **Settings window**: pick the provider, store the token, search the account, choose the unit and see the **detected functions** before using it.
 - **Translations**: English and Brazilian Portuguese.
 
 <p align="center">

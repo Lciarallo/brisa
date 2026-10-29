@@ -12,6 +12,7 @@ import {PROVIDERS, createProvider} from './providers/index.js';
 import {isValidCountry} from './providers/thinq.js';
 import {parseServerUrl} from './providers/homeassistant.js';
 import {lookupToken, storeToken, clearToken} from './lib/secret.js';
+import {makeValueLabel, formatNumber} from './lib/labels.js';
 
 const THINQ_PAT_URL = 'https://connect-pat.lgthinq.com';
 const HA_TOKEN_DOCS = 'https://www.home-assistant.io/docs/authentication/#your-account-profile';
@@ -216,6 +217,7 @@ export default class BrisaPreferences extends ExtensionPreferences {
                         settings.set_string('device-id', d.id);
                         syncCurrent();
                         toast(_('Selected: %s').format(d.name));
+                        detectButton.emit('clicked');
                     });
                     addRow(row);
                 }
@@ -236,7 +238,72 @@ export default class BrisaPreferences extends ExtensionPreferences {
         });
         deviceGroup.add(autoRow);
 
+        // What the selected unit reports it can do (same detection the menu uses).
+        const detectedGroup = new Adw.PreferencesGroup({
+            title: _('Detected functions'),
+            description: _('Read from the air conditioner itself. The menu shows exactly these controls.'),
+        });
+        const detectButton = new Gtk.Button({label: _('Detect'), valign: Gtk.Align.CENTER});
+        detectedGroup.set_header_suffix(detectButton);
+        page.add(detectedGroup);
+        let detectedRows = [];
+        const valueLabel = makeValueLabel(_);
+        const list = values => values.map(valueLabel).join(', ');
+
+        detectButton.connect('clicked', async () => {
+            detectedRows.forEach(r => detectedGroup.remove(r));
+            detectedRows = [];
+            const addRow = (title, subtitle, icon) => {
+                const row = new Adw.ActionRow({title, subtitle, use_markup: false, subtitle_selectable: true});
+                if (icon)
+                    row.add_prefix(typeof icon === 'string' ? new Gtk.Image({icon_name: icon}) : new Gtk.Image({gicon: icon}));
+                detectedGroup.add(row);
+                detectedRows.push(row);
+            };
+            detectButton.sensitive = false;
+            let provider = null;
+            try {
+                const token = await lookupToken(providerId());
+                if (!token)
+                    throw new Error(_('Save an access token first'));
+                provider = createProvider(settings, token);
+                let id = settings.get_string('device-id');
+                if (!id)
+                    id = (await provider.listDevices())[0]?.id;
+                if (!id)
+                    throw new Error(_('No air conditioner found in this account'));
+                const caps = await provider.open(id);
+                if (caps.modes.length)
+                    addRow(_('Modes'), list(caps.modes), 'weather-few-clouds-symbolic');
+                if (caps.temperature) {
+                    const {min, max, step, modes} = caps.temperature;
+                    let text = _('%s to %s %s, steps of %s').format(formatNumber(min), formatNumber(max), caps.unit, formatNumber(step));
+                    if (modes)
+                        text += ` · ${_('only in: %s').format(list(modes))}`;
+                    addRow(_('Target temperature'), text, Gio.FileIcon.new(this.dir.resolve_relative_path('icons/brisa-symbolic.svg')));
+                }
+                if (caps.fans.length)
+                    addRow(_('Fan speed'), list(caps.fans), 'weather-windy-symbolic');
+                if (caps.swings.length)
+                    addRow(_('Swing'), list(caps.swings), 'object-flip-vertical-symbolic');
+                if (caps.presets.length)
+                    addRow(_('Preset'), list(caps.presets), 'starred-symbolic');
+                const groups = new Map();
+                for (const e of caps.extras)
+                    groups.set(e.group, [...groups.get(e.group) ?? [], _(e.label)]);
+                for (const [group, labels] of groups)
+                    addRow(_(group), labels.join(', '), 'view-list-bullet-symbolic');
+            } catch (e) {
+                addRow(_('Connection failed'), _(e.message), 'dialog-error-symbolic');
+            } finally {
+                provider?.destroy();
+                detectButton.sensitive = true;
+            }
+        });
+
         const syncProvider = () => {
+            detectedRows.forEach(r => detectedGroup.remove(r));
+            detectedRows = [];
             const isThinq = providerId() === 'thinq';
             thinqGroup.visible = isThinq;
             haGroup.visible = !isThinq;
@@ -255,6 +322,12 @@ export default class BrisaPreferences extends ExtensionPreferences {
             syncProvider();
         });
         syncProvider();
+
+        // Show the detected functions right away when a token is already saved.
+        lookupToken(providerId()).then(token => {
+            if (token)
+                detectButton.emit('clicked');
+        }).catch(() => {});
 
         // ---- Behaviour page -------------------------------------------------
         const behaviour = new Adw.PreferencesPage({title: _('Behavior'), icon_name: 'preferences-system-symbolic'});

@@ -16,10 +16,14 @@ import {createProvider} from './providers/index.js';
 import {lookupToken} from './lib/secret.js';
 import {StepperItem, ChoiceSubMenu, SwitchItem, InfoItem, ModeChips} from './ui/widgets.js';
 import {AcAnimation} from './ui/animation.js';
+import {makeValueLabel, formatNumber} from './lib/labels.js';
 
 const N_ = s => s;
 const REFRESH_AFTER_CONTROL_S = 4;
 const REFRESH_ON_OPEN_S = 10;
+const REDETECT_EVERY_S = 6 * 3600;
+// LG ThinQ codes meaning the model or feature is not what the profile said.
+const UNSUPPORTED_CODES = ['1219', '1220', '2101', '2201', '2202', '2203'];
 
 const MODE_ICONS = {
     cool: 'weather-snow-symbolic',
@@ -30,64 +34,7 @@ const MODE_ICONS = {
     heat_cool: 'emblem-synchronizing-symbolic',
 };
 
-const VALUE_LABELS = {
-    cool: N_('Cool'),
-    heat: N_('Heat'),
-    dry: N_('Dry'),
-    fan: N_('Fan'),
-    auto: N_('Auto'),
-    heat_cool: N_('Heat/Cool'),
-    energy_saving: N_('Eco'),
-    air_clean: N_('Purify'),
-    aroma: N_('Aroma'),
-    slow: N_('Very low'),
-    quiet: N_('Quiet'),
-    silent: N_('Quiet'),
-    low: N_('Low'),
-    low_mid: N_('Medium-low'),
-    mid: N_('Medium'),
-    medium: N_('Medium'),
-    middle: N_('Medium'),
-    mid_high: N_('Medium-high'),
-    high: N_('High'),
-    power: N_('Turbo'),
-    turbo: N_('Turbo'),
-    nature: N_('Natural'),
-    on: N_('On'),
-    off: N_('Off'),
-    start: N_('On'),
-    stop: N_('Off'),
-    always: N_('Always'),
-    on_working: N_('While running'),
-    good: N_('Good'),
-    normal: N_('Normal'),
-    bad: N_('Poor'),
-    very_bad: N_('Very poor'),
-    invalid: '--',
-    vertical: N_('Vertical'),
-    horizontal: N_('Horizontal'),
-    both: N_('Both'),
-    swing: N_('Swing'),
-    eco: N_('Eco'),
-    boost: N_('Boost'),
-    sleep: N_('Sleep'),
-    comfort: N_('Comfort'),
-    away: N_('Away'),
-    home: N_('Home'),
-    none: N_('None'),
-};
-
-function valueLabel(v) {
-    if (typeof v === 'boolean')
-        return v ? _('Yes') : _('No');
-    if (typeof v !== 'string')
-        return String(v);
-    const known = VALUE_LABELS[v.toLowerCase()];
-    if (known)
-        return _(known);
-    const s = v.replace(/_/g, ' ').toLowerCase();
-    return s.charAt(0).toUpperCase() + s.slice(1);
-}
+const valueLabel = makeValueLabel(_);
 
 const formatHours = h => (h <= 0 ? _('Off') : _('%d h').format(h));
 const formatClock = v => (v < 0 ? _('Off')
@@ -122,7 +69,7 @@ class BrisaToggle extends QuickMenuToggle {
         this.menu.addMenuItem(this._dynamic);
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-        this.menu.addAction(_('Refresh'), () => ext.refresh());
+        this.menu.addAction(_('Refresh'), () => ext.refresh({redetect: true}));
         this.menu.addAction(_('Settings'), () => ext.openPreferences());
 
         this.connect('clicked', () => ext.togglePower());
@@ -181,12 +128,16 @@ class BrisaToggle extends QuickMenuToggle {
             const stepper = new StepperItem(null, {
                 values,
                 big: true,
-                format: v => `${v} ${unit}`,
+                format: v => `${formatNumber(v)} ${unit}`,
                 onCommit: v => ext.setTarget(v),
                 decrease: _('Lower temperature'),
                 increase: _('Raise temperature'),
             });
-            add(stepper, s => stepper.setValue(s.target));
+            // Some units accept a setpoint only in certain modes (e.g. cool).
+            add(stepper, s => {
+                stepper.setValue(s.target);
+                stepper.setSensitive(s.power && ext.usesSetpoint(s));
+            }, {needsPower: false});
         }
 
         for (const [key, title, setter] of [
@@ -261,7 +212,7 @@ class BrisaToggle extends QuickMenuToggle {
     _caption(s, unit) {
         if (!s.power)
             return _('Off');
-        const target = s.target ?? '--';
+        const target = formatNumber(s.target);
         switch (s.action ?? `mode:${s.mode}`) {
         case 'idle':
             return _('Idle — room is at %s %s').format(target, unit);
@@ -290,14 +241,17 @@ class BrisaToggle extends QuickMenuToggle {
         this.checked = s.power;
         this.gicon = s.power && MODE_ICONS[s.mode]
             ? Gio.ThemedIcon.new(MODE_ICONS[s.mode]) : this._ext.icon;
-        this.subtitle = s.power
-            ? `${s.mode ? valueLabel(s.mode) : ''} · ${s.target ?? '--'} ${unit}`
-            : _('Off');
+        const setpoint = this._ext.usesSetpoint(s);
+        const modeText = s.mode ? valueLabel(s.mode) : '';
+        if (!s.power)
+            this.subtitle = _('Off');
+        else
+            this.subtitle = setpoint ? `${modeText} · ${formatNumber(s.target)} ${unit}` : modeText;
         const name = this._ext.deviceName;
         this.title = name || _('A/C');
         this.menu.setHeader(this.gicon, name || _('Air conditioner'),
-            s.current !== null ? _('Room: %s %s').format(s.current, unit) : '');
-        this._animation.setState(s, unit, this._caption(s, unit));
+            s.current !== null ? _('Room: %s %s').format(formatNumber(s.current), unit) : '');
+        this._animation.setState(setpoint ? s : {...s, target: null}, unit, this._caption(s, unit));
         for (const u of this._updaters)
             u(s);
         for (const item of this._sensitives)
@@ -333,9 +287,10 @@ class BrisaIndicator extends SystemIndicator {
     update(s) {
         this.toggle.update(s);
         this.visible = !!s?.power;
-        const showTemp = this._ext.showPanelTemperature && s?.target !== null && s?.target !== undefined;
+        const showTemp = this._ext.showPanelTemperature && this._ext.usesSetpoint(s) &&
+            s?.target !== null && s?.target !== undefined;
         this._label.visible = showTemp;
-        this._label.text = showTemp ? `${s.target}°` : '';
+        this._label.text = showTemp ? `${formatNumber(s.target)}°` : '';
         this._icon.gicon = s?.power && MODE_ICONS[s.mode] ? Gio.ThemedIcon.new(MODE_ICONS[s.mode]) : this._ext.icon;
     }
 
@@ -397,6 +352,12 @@ export default class BrisaExtension extends Extension {
 
     get showPanelTemperature() {
         return this._settings?.get_boolean('show-panel-temperature') ?? false;
+    }
+
+    // True when the current mode takes a target temperature on this unit.
+    usesSetpoint(s) {
+        const t = this._caps?.temperature;
+        return !!t && s?.setpoint !== false && (!t.modes || t.modes.includes(s?.mode));
     }
 
     get deviceName() {
@@ -466,7 +427,13 @@ export default class BrisaExtension extends Extension {
         const caps = await this._provider.open(id, this._cancellable);
         if (gen !== this._generation)
             return;
+        this._useCaps(caps);
+        this._detectedAt = GLib.get_monotonic_time();
+    }
+
+    _useCaps(caps) {
         this._caps = caps;
+        this._capsVersion = this._provider.capsVersion ?? 0;
         this._indicator.toggle.build(caps);
     }
 
@@ -475,15 +442,26 @@ export default class BrisaExtension extends Extension {
             this.refresh();
     }
 
-    async refresh() {
+    // Capabilities are re-detected on a manual refresh, every few hours, and
+    // after the device rejects a command as unsupported (e.g. new firmware).
+    async refresh({redetect = false} = {}) {
         const gen = this._generation;
         if (!this._provider)
             return;
+        if (redetect || this._redetect ||
+            GLib.get_monotonic_time() - (this._detectedAt ?? 0) > REDETECT_EVERY_S * 1e6) {
+            this._redetect = false;
+            this._caps = null;
+        }
         try {
             await this._ensureDevice(gen);
             const state = await this._provider.getState(this._cancellable);
             if (gen !== this._generation || !this._caps)
                 return;
+            // Providers that read capabilities from every state reply (Home
+            // Assistant) bump capsVersion when the entity changes.
+            if ((this._provider.capsVersion ?? 0) !== this._capsVersion)
+                this._useCaps(this._provider.caps);
             this._lastRefresh = GLib.get_monotonic_time();
             this._state = state;
             this._indicator.update(state);
@@ -523,6 +501,8 @@ export default class BrisaExtension extends Extension {
             this._state = previous;
             this._indicator.update(previous);
             this._indicator.toggle.showMessage(_(e.message));
+            if (UNSUPPORTED_CODES.includes(String(e.code)))
+                this._redetect = true;
         }
     }
 
@@ -535,19 +515,21 @@ export default class BrisaExtension extends Extension {
         this.send('setPower', on, {power: on});
     }
 
-    // Picking a mode while the unit is off turns it on in that mode.
+    // Picking a mode while the unit is off turns it on in that mode. Whether
+    // the new mode takes a setpoint is unknown until the next state reply,
+    // so the per-mode capability list decides meanwhile.
     async setMode(mode) {
         if (this._state && !this._state.power && this._provider?.modeTurnsOn) {
-            this.send('setMode', mode, {power: true, mode});
+            this.send('setMode', mode, {power: true, mode, setpoint: undefined});
             return;
         }
         if (this._state && !this._state.power) {
-            await this.send('setPower', true, {power: true, mode});
+            await this.send('setPower', true, {power: true, mode, setpoint: undefined});
             if (this._state?.mode === mode && this._caps?.modes.length > 1)
-                await this.send('setMode', mode, {mode});
+                await this.send('setMode', mode, {mode, setpoint: undefined});
             return;
         }
-        this.send('setMode', mode, {mode});
+        this.send('setMode', mode, {mode, setpoint: undefined});
     }
 
     setTarget(value) {

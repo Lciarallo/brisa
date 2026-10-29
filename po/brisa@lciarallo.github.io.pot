@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Luiz Eduardo Ciarallo
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the Brisa package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Brisa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 02:20-0300\n"
+"POT-Creation-Date: 2026-10-29 02:56-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,505 +17,541 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: brisa@lciarallo.github.io/extension.js:34
-msgid "Cool"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:35
-msgid "Heat"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:36
-msgid "Dry"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:37
-msgid "Fan"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:38
-msgid "Auto"
-msgstr ""
-
 #: brisa@lciarallo.github.io/extension.js:39
-msgid "Heat/Cool"
-msgstr ""
-
 #: brisa@lciarallo.github.io/extension.js:40
-#: brisa@lciarallo.github.io/extension.js:71
-msgid "Eco"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:41
-msgid "Purify"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:42
-msgid "Aroma"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:43
-msgid "Very low"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:44
-#: brisa@lciarallo.github.io/extension.js:45
-msgid "Quiet"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:46
-msgid "Low"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:47
-msgid "Medium-low"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:48
-#: brisa@lciarallo.github.io/extension.js:49
-#: brisa@lciarallo.github.io/extension.js:50
-msgid "Medium"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:51
-msgid "Medium-high"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:52
-msgid "High"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:53
-#: brisa@lciarallo.github.io/extension.js:54
-msgid "Turbo"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:55
-msgid "Natural"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:56
-#: brisa@lciarallo.github.io/extension.js:58
-msgid "On"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:57
-#: brisa@lciarallo.github.io/extension.js:59
-#: brisa@lciarallo.github.io/extension.js:92
-#: brisa@lciarallo.github.io/extension.js:93
-#: brisa@lciarallo.github.io/extension.js:263
-#: brisa@lciarallo.github.io/extension.js:295
+#: brisa@lciarallo.github.io/extension.js:214
+#: brisa@lciarallo.github.io/extension.js:247
+#: brisa@lciarallo.github.io/lib/labels.js:33
+#: brisa@lciarallo.github.io/lib/labels.js:35
 msgid "Off"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:60
-msgid "Always"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:61
-msgid "While running"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:62
-msgid "Good"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:63
-msgid "Normal"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:64
-msgid "Poor"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:65
-msgid "Very poor"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:67
-msgid "Vertical"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:68
-msgid "Horizontal"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:69
-msgid "Both"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:70
-#: brisa@lciarallo.github.io/extension.js:194
-msgid "Swing"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:72
-msgid "Boost"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:73
-msgid "Sleep"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:74
-msgid "Comfort"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:75
-msgid "Away"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:76
-msgid "Home"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:77
-msgid "None"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:82
-msgid "Yes"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:82
-msgid "No"
-msgstr ""
-
-#: brisa@lciarallo.github.io/extension.js:92
+#: brisa@lciarallo.github.io/extension.js:39
 #, javascript-format
 msgid "%d h"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:100
-#: brisa@lciarallo.github.io/extension.js:297
+#: brisa@lciarallo.github.io/extension.js:47
+#: brisa@lciarallo.github.io/extension.js:251
 msgid "A/C"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:101
+#: brisa@lciarallo.github.io/extension.js:48
 msgid "Loading…"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:108
-#: brisa@lciarallo.github.io/extension.js:298
-#: brisa@lciarallo.github.io/prefs.js:167
+#: brisa@lciarallo.github.io/extension.js:55
+#: brisa@lciarallo.github.io/extension.js:252
+#: brisa@lciarallo.github.io/prefs.js:169
 msgid "Air conditioner"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:116
+#: brisa@lciarallo.github.io/extension.js:63
 msgid "Set up connection…"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:125
+#: brisa@lciarallo.github.io/extension.js:72
 msgid "Refresh"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:126
+#: brisa@lciarallo.github.io/extension.js:73
 msgid "Settings"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:141
+#: brisa@lciarallo.github.io/extension.js:88
 msgid "Not configured"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:141
+#: brisa@lciarallo.github.io/extension.js:88
+#: brisa@lciarallo.github.io/lib/labels.js:40
 msgid "Error"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:186
+#: brisa@lciarallo.github.io/extension.js:133
 msgid "Lower temperature"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:187
+#: brisa@lciarallo.github.io/extension.js:134
 msgid "Raise temperature"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:193
+#: brisa@lciarallo.github.io/extension.js:144
+#: brisa@lciarallo.github.io/prefs.js:286
 msgid "Fan speed"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:195
+#: brisa@lciarallo.github.io/extension.js:145
+#: brisa@lciarallo.github.io/prefs.js:288
+#: brisa@lciarallo.github.io/lib/labels.js:47
+msgid "Swing"
+msgstr ""
+
+#: brisa@lciarallo.github.io/extension.js:146
+#: brisa@lciarallo.github.io/prefs.js:290
 msgid "Preset"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:210
-#: brisa@lciarallo.github.io/providers/thinq.js:223
-#: brisa@lciarallo.github.io/providers/thinq.js:229
-#: brisa@lciarallo.github.io/providers/thinq.js:235
-#: brisa@lciarallo.github.io/providers/thinq.js:245
+#: brisa@lciarallo.github.io/extension.js:161
+#: brisa@lciarallo.github.io/providers/thinq.js:253
+#: brisa@lciarallo.github.io/providers/thinq.js:274
 msgid "Timers"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:228
+#: brisa@lciarallo.github.io/extension.js:179
 msgid "Previous"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:229
+#: brisa@lciarallo.github.io/extension.js:180
 msgid "Next"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:242
-#: brisa@lciarallo.github.io/providers/thinq.js:281
+#: brisa@lciarallo.github.io/extension.js:193
+#: brisa@lciarallo.github.io/providers/thinq.js:310
 msgid "Sensors"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:244
+#: brisa@lciarallo.github.io/extension.js:195
 msgid "Room temperature"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:245
+#: brisa@lciarallo.github.io/extension.js:196
 msgid "Humidity"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:267
+#: brisa@lciarallo.github.io/extension.js:218
 #, javascript-format
 msgid "Idle — room is at %s %s"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:270
+#: brisa@lciarallo.github.io/extension.js:221
 #, javascript-format
 msgid "Cooling to %s %s"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:273
+#: brisa@lciarallo.github.io/extension.js:224
 #, javascript-format
 msgid "Heating to %s %s"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:276
+#: brisa@lciarallo.github.io/extension.js:227
 msgid "Removing humidity"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:279
+#: brisa@lciarallo.github.io/extension.js:230
 msgid "Circulating air"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:281
+#: brisa@lciarallo.github.io/extension.js:232
 #, javascript-format
 msgid "Keeping %s %s"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:299
+#: brisa@lciarallo.github.io/extension.js:253
 #, javascript-format
 msgid "Room: %s %s"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:309
+#: brisa@lciarallo.github.io/extension.js:263
 msgid "Sending…"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:433
-#: brisa@lciarallo.github.io/prefs.js:134
+#: brisa@lciarallo.github.io/extension.js:394
+#: brisa@lciarallo.github.io/prefs.js:136
 #, javascript-format
 msgid "Could not read the keyring: %s"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:439
+#: brisa@lciarallo.github.io/extension.js:400
 msgid "Add your access token in the settings"
 msgstr ""
 
-#: brisa@lciarallo.github.io/extension.js:463
-#: brisa@lciarallo.github.io/prefs.js:203
+#: brisa@lciarallo.github.io/extension.js:424
+#: brisa@lciarallo.github.io/prefs.js:205
+#: brisa@lciarallo.github.io/prefs.js:274
 msgid "No air conditioner found in this account"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:32
+#: brisa@lciarallo.github.io/prefs.js:34
 msgid "Connection"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:36
+#: brisa@lciarallo.github.io/prefs.js:38
 msgid "Air conditioner source"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:37
+#: brisa@lciarallo.github.io/prefs.js:39
 msgid ""
 "LG units connect straight to the LG ThinQ cloud. Other brands work through a "
 "Home Assistant server."
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:41
+#: brisa@lciarallo.github.io/prefs.js:43
 msgid "Connect with"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:49
+#: brisa@lciarallo.github.io/prefs.js:51
 #: brisa@lciarallo.github.io/providers/index.js:10
 msgid "LG ThinQ"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:50
+#: brisa@lciarallo.github.io/prefs.js:52
 msgid ""
 "Create a Personal Access Token with the same account used in the ThinQ app, "
 "allowing it to list devices, read their status and control them."
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:53
+#: brisa@lciarallo.github.io/prefs.js:55
 msgid "Create a token on the LG ThinQ website"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:57
+#: brisa@lciarallo.github.io/prefs.js:59
 msgid "Account country (two letters, e.g. BR)"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:63
-#: brisa@lciarallo.github.io/providers/thinq.js:145
+#: brisa@lciarallo.github.io/prefs.js:65
+#: brisa@lciarallo.github.io/providers/thinq.js:151
 msgid "Invalid country code"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:74
+#: brisa@lciarallo.github.io/prefs.js:76
 msgid "Home Assistant"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:75
+#: brisa@lciarallo.github.io/prefs.js:77
 msgid ""
 "Any climate entity works. Create a long-lived access token in your Home "
 "Assistant profile, under Security."
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:78
+#: brisa@lciarallo.github.io/prefs.js:80
 msgid "How to create a long-lived token"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:82
+#: brisa@lciarallo.github.io/prefs.js:84
 msgid "Server address, e.g. homeassistant.local:8123 with https"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:85
+#: brisa@lciarallo.github.io/prefs.js:87
 msgid "Unencrypted connection"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:86
+#: brisa@lciarallo.github.io/prefs.js:88
 msgid ""
 "With http:// the token travels in clear text on your local network. Prefer "
 "https://."
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:115
+#: brisa@lciarallo.github.io/prefs.js:117
 msgid "Access token"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:116
+#: brisa@lciarallo.github.io/prefs.js:118
 msgid "The token is stored in the GNOME Keyring, never in plain-text settings."
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:119
+#: brisa@lciarallo.github.io/prefs.js:121
 msgid "Saved token"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:120
+#: brisa@lciarallo.github.io/prefs.js:122
 msgid "Remove"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:123
+#: brisa@lciarallo.github.io/prefs.js:125
 msgid "Paste a new token"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:131
+#: brisa@lciarallo.github.io/prefs.js:133
 msgid "Stored in the keyring"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:131
+#: brisa@lciarallo.github.io/prefs.js:133
 msgid "Not set"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:142
+#: brisa@lciarallo.github.io/prefs.js:144
 msgid "That does not look like a valid token"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:147
+#: brisa@lciarallo.github.io/prefs.js:149
 msgid "Token saved in the keyring"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:150
+#: brisa@lciarallo.github.io/prefs.js:152
 #, javascript-format
 msgid "Could not save the token: %s"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:158
+#: brisa@lciarallo.github.io/prefs.js:160
 msgid "Token removed"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:168
+#: brisa@lciarallo.github.io/prefs.js:170
 msgid "Search the account and pick the unit to control."
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:171
+#: brisa@lciarallo.github.io/prefs.js:173
 msgid "Search"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:177
+#: brisa@lciarallo.github.io/prefs.js:179
 msgid "Selected"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:182
+#: brisa@lciarallo.github.io/prefs.js:184
 msgid "Automatic (first one found)"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:199
+#: brisa@lciarallo.github.io/prefs.js:201
+#: brisa@lciarallo.github.io/prefs.js:268
 msgid "Save an access token first"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:217
+#: brisa@lciarallo.github.io/prefs.js:219
 #, javascript-format
 msgid "Selected: %s"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:222
+#: brisa@lciarallo.github.io/prefs.js:225
+#: brisa@lciarallo.github.io/prefs.js:297
 msgid "Connection failed"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:230
+#: brisa@lciarallo.github.io/prefs.js:233
 msgid "Use the first one found"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:259
-msgid "Behavior"
+#: brisa@lciarallo.github.io/prefs.js:243
+msgid "Detected functions"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:261
-msgid "Appearance"
+#: brisa@lciarallo.github.io/prefs.js:244
+msgid ""
+"Read from the air conditioner itself. The menu shows exactly these controls."
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:264
-msgid "Live animation"
-msgstr ""
-
-#: brisa@lciarallo.github.io/prefs.js:265
-msgid "Shows what the unit is doing while the menu is open"
-msgstr ""
-
-#: brisa@lciarallo.github.io/prefs.js:270
-msgid "Temperature in the top bar"
-msgstr ""
-
-#: brisa@lciarallo.github.io/prefs.js:271
-msgid "Shown next to the icon while the unit is on"
+#: brisa@lciarallo.github.io/prefs.js:246
+msgid "Detect"
 msgstr ""
 
 #: brisa@lciarallo.github.io/prefs.js:277
+msgid "Modes"
+msgstr ""
+
+#: brisa@lciarallo.github.io/prefs.js:280
+#, javascript-format
+msgid "%s to %s %s, steps of %s"
+msgstr ""
+
+#: brisa@lciarallo.github.io/prefs.js:282
+#, javascript-format
+msgid "only in: %s"
+msgstr ""
+
+#: brisa@lciarallo.github.io/prefs.js:283
+msgid "Target temperature"
+msgstr ""
+
+#: brisa@lciarallo.github.io/prefs.js:333
+msgid "Behavior"
+msgstr ""
+
+#: brisa@lciarallo.github.io/prefs.js:335
+msgid "Appearance"
+msgstr ""
+
+#: brisa@lciarallo.github.io/prefs.js:338
+msgid "Live animation"
+msgstr ""
+
+#: brisa@lciarallo.github.io/prefs.js:339
+msgid "Shows what the unit is doing while the menu is open"
+msgstr ""
+
+#: brisa@lciarallo.github.io/prefs.js:344
+msgid "Temperature in the top bar"
+msgstr ""
+
+#: brisa@lciarallo.github.io/prefs.js:345
+msgid "Shown next to the icon while the unit is on"
+msgstr ""
+
+#: brisa@lciarallo.github.io/prefs.js:351
 msgid "Updates"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:278
+#: brisa@lciarallo.github.io/prefs.js:352
 msgid ""
 "Cloud APIs have rate limits; very short intervals may get the token blocked "
 "for a while."
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:282
+#: brisa@lciarallo.github.io/prefs.js:356
 msgid "Refresh every (seconds)"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:289
+#: brisa@lciarallo.github.io/prefs.js:363
 msgid "Privacy"
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:290
+#: brisa@lciarallo.github.io/prefs.js:364
 msgid ""
 "Brisa only talks to the LG ThinQ cloud or to your Home Assistant server. It "
 "has no telemetry and keeps no logs of your device."
 msgstr ""
 
-#: brisa@lciarallo.github.io/prefs.js:293
+#: brisa@lciarallo.github.io/prefs.js:367
 msgid "Project page and source code"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:10
+msgid "Cool"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:11
+msgid "Heat"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:12
+msgid "Dry"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:13
+msgid "Fan"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:14
+msgid "Auto"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:15
+msgid "Heat/Cool"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:16
+#: brisa@lciarallo.github.io/lib/labels.js:48
+msgid "Eco"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:17
+msgid "Purify"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:18
+msgid "Aroma"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:19
+msgid "Very low"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:20
+#: brisa@lciarallo.github.io/lib/labels.js:21
+msgid "Quiet"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:22
+msgid "Low"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:23
+msgid "Medium-low"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:24
+#: brisa@lciarallo.github.io/lib/labels.js:25
+#: brisa@lciarallo.github.io/lib/labels.js:26
+msgid "Medium"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:27
+msgid "Medium-high"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:28
+msgid "High"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:29
+#: brisa@lciarallo.github.io/lib/labels.js:30
+msgid "Turbo"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:31
+msgid "Natural"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:32
+#: brisa@lciarallo.github.io/lib/labels.js:34
+msgid "On"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:36
+msgid "Always"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:37
+msgid "While running"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:38
+msgid "Good"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:39
+msgid "Normal"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:41
+msgid "Poor"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:42
+msgid "Very poor"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:44
+msgid "Vertical"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:45
+msgid "Horizontal"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:46
+msgid "Both"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:49
+msgid "Boost"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:50
+msgid "Sleep"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:51
+msgid "Comfort"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:52
+msgid "Away"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:53
+msgid "Home"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:54
+msgid "None"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:59
+msgid "Yes"
+msgstr ""
+
+#: brisa@lciarallo.github.io/lib/labels.js:59
+msgid "No"
 msgstr ""
 
 #: brisa@lciarallo.github.io/providers/homeassistant.js:26
@@ -534,54 +570,66 @@ msgstr ""
 msgid "Use https:// for servers outside your local network"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/homeassistant.js:77
+#: brisa@lciarallo.github.io/providers/homeassistant.js:97
 #: brisa@lciarallo.github.io/providers/thinq.js:37
 #: brisa@lciarallo.github.io/providers/thinq.js:38
 #: brisa@lciarallo.github.io/providers/thinq.js:39
 msgid "The access token is invalid or expired"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/homeassistant.js:79
-#: brisa@lciarallo.github.io/providers/homeassistant.js:125
+#: brisa@lciarallo.github.io/providers/homeassistant.js:99
+#: brisa@lciarallo.github.io/providers/homeassistant.js:173
 #: brisa@lciarallo.github.io/providers/thinq.js:44
 msgid "Device not found in this account"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/homeassistant.js:80
+#: brisa@lciarallo.github.io/providers/homeassistant.js:100
 msgid "Home Assistant request failed"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/homeassistant.js:93
-#: brisa@lciarallo.github.io/providers/thinq.js:190
+#: brisa@lciarallo.github.io/providers/homeassistant.js:113
+#: brisa@lciarallo.github.io/providers/thinq.js:196
 msgid "Invalid device id"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/homeassistant.js:111
-#: brisa@lciarallo.github.io/providers/thinq.js:98
+#: brisa@lciarallo.github.io/providers/homeassistant.js:154
+msgid "Temperature range"
+msgstr ""
+
+#: brisa@lciarallo.github.io/providers/homeassistant.js:155
+msgid "Lowest"
+msgstr ""
+
+#: brisa@lciarallo.github.io/providers/homeassistant.js:156
+msgid "Highest"
+msgstr ""
+
+#: brisa@lciarallo.github.io/providers/homeassistant.js:159
+#: brisa@lciarallo.github.io/providers/thinq.js:104
 msgid "Horizontal swing"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/homeassistant.js:112
-#: brisa@lciarallo.github.io/providers/thinq.js:130
+#: brisa@lciarallo.github.io/providers/homeassistant.js:160
+#: brisa@lciarallo.github.io/providers/thinq.js:136
 msgid "Air direction"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/homeassistant.js:116
+#: brisa@lciarallo.github.io/providers/homeassistant.js:164
 msgid "Target humidity"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/homeassistant.js:116
-#: brisa@lciarallo.github.io/providers/thinq.js:263
+#: brisa@lciarallo.github.io/providers/homeassistant.js:164
+#: brisa@lciarallo.github.io/providers/thinq.js:292
 msgid "Features"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/homeassistant.js:127
+#: brisa@lciarallo.github.io/providers/homeassistant.js:175
 #: brisa@lciarallo.github.io/providers/thinq.js:45
 msgid "The air conditioner is offline"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/homeassistant.js:187
-#: brisa@lciarallo.github.io/providers/thinq.js:340
+#: brisa@lciarallo.github.io/providers/homeassistant.js:252
+#: brisa@lciarallo.github.io/providers/thinq.js:376
 msgid "Not supported"
 msgstr ""
 
@@ -615,6 +663,7 @@ msgid "Turn the air conditioner on first"
 msgstr ""
 
 #: brisa@lciarallo.github.io/providers/thinq.js:49
+#: brisa@lciarallo.github.io/providers/thinq.js:365
 msgid "Not available in the current mode"
 msgstr ""
 
@@ -622,126 +671,130 @@ msgstr ""
 msgid "Not available in the current state"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:93
+#: brisa@lciarallo.github.io/providers/thinq.js:99
 msgid "Air purification"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:94
+#: brisa@lciarallo.github.io/providers/thinq.js:100
 msgid "Energy saving"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:95
+#: brisa@lciarallo.github.io/providers/thinq.js:101
 msgid "Display light"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:96
+#: brisa@lciarallo.github.io/providers/thinq.js:102
 msgid "Wind strength"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:97
+#: brisa@lciarallo.github.io/providers/thinq.js:103
 msgid "Vertical swing"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:99
+#: brisa@lciarallo.github.io/providers/thinq.js:105
 msgid "Air guide"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:100
+#: brisa@lciarallo.github.io/providers/thinq.js:106
 msgid "Auto fit"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:101
+#: brisa@lciarallo.github.io/providers/thinq.js:107
 msgid "Concentrated wind"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:102
+#: brisa@lciarallo.github.io/providers/thinq.js:108
 msgid "Forest wind"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:103
+#: brisa@lciarallo.github.io/providers/thinq.js:109
 msgid "High ceiling"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:104
+#: brisa@lciarallo.github.io/providers/thinq.js:110
 msgid "Long reach"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:105
+#: brisa@lciarallo.github.io/providers/thinq.js:111
 msgid "Gentle wind"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:106
+#: brisa@lciarallo.github.io/providers/thinq.js:112
 msgid "Swirl wind"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:107
+#: brisa@lciarallo.github.io/providers/thinq.js:113
 msgid "Air monitoring"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:108
+#: brisa@lciarallo.github.io/providers/thinq.js:114
 msgid "PM1"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:109
+#: brisa@lciarallo.github.io/providers/thinq.js:115
 msgid "PM2.5"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:110
+#: brisa@lciarallo.github.io/providers/thinq.js:116
 msgid "PM10"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:111
+#: brisa@lciarallo.github.io/providers/thinq.js:117
 msgid "Odor"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:112
+#: brisa@lciarallo.github.io/providers/thinq.js:118
 msgid "Odor level"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:113
+#: brisa@lciarallo.github.io/providers/thinq.js:119
 msgid "Total pollution"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:114
+#: brisa@lciarallo.github.io/providers/thinq.js:120
 msgid "Air quality"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:115
+#: brisa@lciarallo.github.io/providers/thinq.js:121
 msgid "Filter usage"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:116
+#: brisa@lciarallo.github.io/providers/thinq.js:122
 msgid "Filter lifetime"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:117
+#: brisa@lciarallo.github.io/providers/thinq.js:123
 msgid "Filter remaining"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:118
+#: brisa@lciarallo.github.io/providers/thinq.js:124
 msgid "Dual setpoint"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:177
+#: brisa@lciarallo.github.io/providers/thinq.js:125
+msgid "Status"
+msgstr ""
+
+#: brisa@lciarallo.github.io/providers/thinq.js:183
 msgid "LG ThinQ request failed"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:223
+#: brisa@lciarallo.github.io/providers/thinq.js:266
 msgid "Sleep timer"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:229
+#: brisa@lciarallo.github.io/providers/thinq.js:267
 msgid "Turn off in"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:235
+#: brisa@lciarallo.github.io/providers/thinq.js:268
 msgid "Turn on in"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:240
+#: brisa@lciarallo.github.io/providers/thinq.js:269
 msgid "Turn on at"
 msgstr ""
 
-#: brisa@lciarallo.github.io/providers/thinq.js:240
+#: brisa@lciarallo.github.io/providers/thinq.js:269
 msgid "Turn off at"
 msgstr ""

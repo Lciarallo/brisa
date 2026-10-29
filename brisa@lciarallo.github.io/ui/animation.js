@@ -13,6 +13,7 @@ import Clutter from 'gi://Clutter';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {keepReadable} from './widgets.js';
+import {formatNumber} from '../lib/labels.js';
 
 const COLORS = {
     cool: [0.38, 0.63, 0.92],
@@ -145,7 +146,7 @@ class AcAnimation extends PopupMenu.PopupBaseMenuItem {
             cr.selectFontFace('Sans', 0, 1);
             cr.setFontSize(12);
             cr.setSourceRGBA(...color, 0.95);
-            const text = `${s.target}°`;
+            const text = `${formatNumber(s.target)}°`;
             const ext = cr.textExtents(text);
             cr.moveTo(ux + uw - 14 - ext.width, uy + 19);
             cr.showText(text);
