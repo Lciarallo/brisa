@@ -22,6 +22,8 @@ const N_ = s => s;
 const REFRESH_AFTER_CONTROL_S = 4;
 const REFRESH_ON_OPEN_S = 10;
 const REDETECT_EVERY_S = 6 * 3600;
+const KEYRING_RETRY_FIRST_S = 5;
+const KEYRING_RETRY_MAX_S = 60;
 // LG ThinQ codes meaning the model or feature is not what the profile said.
 const UNSUPPORTED_CODES = ['1219', '1220', '2101', '2201', '2202', '2203'];
 
@@ -75,7 +77,9 @@ class BrisaToggle extends QuickMenuToggle {
         this.connect('clicked', () => ext.togglePower());
         this._openId = this.menu.connect('open-state-changed', (_m, open) => {
             this._animation.setActive(open && ext.animate);
-            if (open)
+            if (open && !ext.connected)
+                ext.retryNow();
+            else if (open)
                 ext.refreshIfStale(REFRESH_ON_OPEN_S);
         });
     }
@@ -369,7 +373,11 @@ export default class BrisaExtension extends Extension {
         return !!t && s?.setpoint !== false && (!t.modes || t.modes.includes(s?.mode));
     }
 
-    get deviceName() {
+    get connected() {
+        return !!this._state;
+    }
+
+        get deviceName() {
         return this._settings?.get_string('device-name') ?? '';
     }
 
@@ -382,10 +390,34 @@ export default class BrisaExtension extends Extension {
             GLib.source_remove(this._delayId);
             this._delayId = 0;
         }
+        if (this._retryId) {
+            GLib.source_remove(this._retryId);
+            this._retryId = 0;
+        }
         this._cancellable?.cancel();
         this._cancellable = null;
         this._provider?.destroy();
         this._provider = null;
+    }
+
+    _retryLater() {
+        if (this._retryId)
+            return;
+        const delay = this._retryDelay ?? KEYRING_RETRY_FIRST_S;
+        this._retryDelay = Math.min(delay * 2, KEYRING_RETRY_MAX_S);
+        this._retryId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, delay, () => {
+            this._retryId = 0;
+            this._restart();
+            return GLib.SOURCE_REMOVE;
+        });
+    }
+
+    // Opening the menu or clicking the toggle retries at once.
+    retryNow() {
+        if (this._provider)
+            this.refresh({redetect: !this._caps});
+        else
+            this._restart();
     }
 
     // Each restart gets a generation number so late replies from an old
@@ -402,16 +434,22 @@ export default class BrisaExtension extends Extension {
         try {
             token = await lookupToken(providerId, this._cancellable);
         } catch (e) {
-            if (gen === this._generation)
-                this._indicator.toggle.showMessage(_('Could not read the keyring: %s').format(e.message));
+            if (gen !== this._generation)
+                return;
+            this._indicator.toggle.showMessage(_('Could not read the keyring: %s').format(e.message));
+            this._retryLater();
             return;
         }
         if (gen !== this._generation)
             return;
         if (!token) {
+            // At login the keyring may still be locked when the extension
+            // starts, which looks exactly like a missing token: keep retrying.
             this._indicator.toggle.showMessage(_('Add your access token in the settings'), {setup: true});
+            this._retryLater();
             return;
         }
+        this._retryDelay = KEYRING_RETRY_FIRST_S;
         try {
             this._provider = createProvider(this._settings, token);
         } catch (e) {
@@ -519,8 +557,11 @@ export default class BrisaExtension extends Extension {
     }
 
     togglePower() {
+        // Not connected yet: try again instead of jumping to the settings
+        // (the menu offers "Set up connection…" when a token is really missing).
         if (!this._state) {
-            this.openPreferences();
+            this._indicator.toggle.subtitle = _('Connecting…');
+            this.retryNow();
             return;
         }
         const on = !this._state.power;
