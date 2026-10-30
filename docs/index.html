@@ -177,10 +177,10 @@ section .sub { color: var(--muted); margin: 0 0 32px; max-width: 42em; }
 @media (max-width: 760px) { .shots { grid-template-columns: 1fr; } }
 .shots img { width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface); }
 
-.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 46em; }
-.steps li { display: grid; grid-template-columns: 32px 1fr; gap: 14px; align-items: start; }
+.steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; max-width: 46em; }
+.steps li { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 14px; align-items: start; }
 .steps .n { width: 32px; height: 32px; border-radius: 50%; background: var(--accent-ink); color: #fff; font-weight: 800; display: grid; place-items: center; }
-.steps p { margin: 4px 0 0; }
+.steps p { margin: 4px 0 0; overflow-wrap: anywhere; }
 pre { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; overflow-x: auto; font-size: .9rem; margin: 10px 0 0; }
 code { font-family: "Source Code Pro", ui-monospace, monospace; }
 .soon { color: var(--muted); font-size: .95rem; margin: 18px 0 0; }
