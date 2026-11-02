@@ -2,6 +2,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // SPDX-FileCopyrightText: 2026 Luiz Eduardo Ciarallo
 
+// Generated with AI for personal use.
+// Do NOT upload to extensions.gnome.org (EGO) unless you understand JavaScript
+// and can maintain this code.
+
 // Prints the LG ThinQ capability profile of your air conditioners so it can
 // be attached to a "New device" issue. The token is read from the keyring
 // (saved by Brisa's settings) and is never printed; device ids are redacted.

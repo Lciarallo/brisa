@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // SPDX-FileCopyrightText: 2026 Luiz Eduardo Ciarallo
 
+// Generated with AI for personal use.
+// Do NOT upload to extensions.gnome.org (EGO) unless you understand JavaScript
+// and can maintain this code.
+
 // Human labels for the raw values devices report. Shared by the Shell
 // process and the preferences, which each pass in their own gettext.
 
@@ -8,7 +12,7 @@
 const translatable = text => text;
 
 // Raw value reported by the device (lower-cased) -> English label.
-export const VALUE_LABELS = {
+const VALUE_LABELS = {
     'cool': translatable('Cool'),
     'heat': translatable('Heat'),
     'dry': translatable('Dry'),
@@ -56,6 +60,13 @@ export const VALUE_LABELS = {
     'none': translatable('None'),
 };
 
+export function stepValues(min, max, step, limit = 100) {
+    const values = [];
+    for (let v = min; v <= max + 1e-9 && values.length < limit; v += step)
+        values.push(Math.round(v * 10) / 10);
+    return values;
+}
+
 // Locale-aware number ("22,5" in pt_BR, "22.5" in en).
 export function formatNumber(value) {
     if (typeof value === 'number')
@@ -63,7 +74,6 @@ export function formatNumber(value) {
     return String(value ?? '--');
 }
 
-// Returns a function that turns a raw device value into a translated label.
 export function makeValueLabel(gettext) {
     return function valueLabel(value) {
         if (typeof value === 'boolean')

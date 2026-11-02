@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // SPDX-FileCopyrightText: 2026 Luiz Eduardo Ciarallo
 
+// Generated with AI for personal use.
+// Do NOT upload to extensions.gnome.org (EGO) unless you understand JavaScript
+// and can maintain this code.
+
 import {ThinQProvider} from './thinq.js';
 import {HomeAssistantProvider} from './homeassistant.js';
 

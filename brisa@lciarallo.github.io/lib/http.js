@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // SPDX-FileCopyrightText: 2026 Luiz Eduardo Ciarallo
 
+// Generated with AI for personal use.
+// Do NOT upload to extensions.gnome.org (EGO) unless you understand JavaScript
+// and can maintain this code.
+
 // Small JSON-over-HTTPS helper shared by every provider.
 //
 // Hardening: redirects are never followed (the bearer token must not be
@@ -34,7 +38,7 @@ export class JsonSession {
     }
 
     destroy() {
-        this._session?.abort();
+        this._session.abort();
         this._session = null;
     }
 

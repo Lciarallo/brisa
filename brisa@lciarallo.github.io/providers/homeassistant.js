@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // SPDX-FileCopyrightText: 2026 Luiz Eduardo Ciarallo
 
+// Generated with AI for personal use.
+// Do NOT upload to extensions.gnome.org (EGO) unless you understand JavaScript
+// and can maintain this code.
+
 // Home Assistant REST API (long-lived access token). Any climate entity works,
 // so this covers Samsung, Midea, Gree, Daikin, Tuya, Fujitsu, Sensibo, etc.
 
@@ -8,6 +12,7 @@ import GLib from 'gi://GLib';
 
 import {JsonSession, HttpError} from '../lib/http.js';
 import {ProviderError} from './thinq.js';
+import {stepValues} from '../lib/labels.js';
 
 const N_ = s => s;
 
@@ -63,11 +68,11 @@ const FEATURE = {
 const SIGNATURE_KEYS = ['supported_features', 'hvac_modes', 'fan_modes', 'swing_modes', 'preset_modes',
     'swing_horizontal_modes', 'min_temp', 'max_temp', 'target_temp_step', 'min_humidity', 'max_humidity'];
 
-const ACTIONS = {cooling: 'cooling', heating: 'heating', drying: 'drying', fan: 'fan', idle: 'idle',
-    off: 'off', preheating: 'heating', defrosting: 'heating'};
+// hvac_action values that mean the same as another for the animation.
+const ACTION_ALIASES = {preheating: 'heating', defrosting: 'heating'};
 
 export class HomeAssistantProvider {
-    static id = 'homeassistant';
+    capsVersion = 0;
 
     // set_hvac_mode with a real mode also switches the unit on.
     modeTurnsOn = true;
@@ -126,19 +131,12 @@ export class HomeAssistantProvider {
         if (sig === this._signature)
             return;
         this._signature = sig;
-        this.capsVersion = (this.capsVersion ?? 0) + 1;
+        this.capsVersion++;
 
         const f = Number.isInteger(a.supported_features) ? a.supported_features : null;
         const has = (bit, fallback) => (f === null ? fallback : (f & bit) !== 0);
         const step = a.target_temp_step ?? (this._unit === '°F' ? 1 : 0.5);
         const bounds = Number.isFinite(a.min_temp) && Number.isFinite(a.max_temp);
-        const steps = (min, max, by) => {
-            const out = [];
-            for (let v = min; v <= max + 1e-9 && out.length < MAX_VALUES; v += by)
-                out.push(Math.round(v * 10) / 10);
-            return out;
-        };
-
         const caps = {
             modes: strings(a.hvac_modes).filter(m => m !== 'off').map(toMode),
             temperature: bounds && has(FEATURE.TARGET_TEMPERATURE, 'temperature' in a)
@@ -150,7 +148,7 @@ export class HomeAssistantProvider {
             extras: [],
         };
         if (bounds && has(FEATURE.TARGET_TEMPERATURE_RANGE, 'target_temp_low' in a)) {
-            const values = steps(a.min_temp, a.max_temp, step);
+            const values = stepValues(a.min_temp, a.max_temp, step, MAX_VALUES);
             const group = N_('Temperature range');
             caps.extras.push({id: 'target_temp_low', label: N_('Lowest'), kind: 'range', group, unit: ` ${this._unit}`, values});
             caps.extras.push({id: 'target_temp_high', label: N_('Highest'), kind: 'range', group, unit: ` ${this._unit}`, values});
@@ -162,7 +160,7 @@ export class HomeAssistantProvider {
         if (has(FEATURE.TARGET_HUMIDITY, Number.isFinite(a.target_humidity))) {
             const min = a.min_humidity ?? 30, max = a.max_humidity ?? 99;
             caps.extras.push({id: 'humidity', label: N_('Target humidity'), kind: 'range', group: N_('Features'),
-                unit: '%', values: steps(min, max, 5)});
+                unit: '%', values: stepValues(min, max, 5, MAX_VALUES)});
         }
         this.caps = caps;
     }
@@ -193,7 +191,7 @@ export class HomeAssistantProvider {
             swing: a.swing_mode ?? null,
             preset: a.preset_mode ?? null,
             oscillating: !!a.swing_mode && !['off', 'stop', 'fixed'].includes(String(a.swing_mode).toLowerCase()),
-            action: ACTIONS[a.hvac_action] ?? null,
+            action: ACTION_ALIASES[a.hvac_action] ?? a.hvac_action ?? null,
             // The entity reports no setpoint in modes that take none (fan, dry…).
             setpoint: a.temperature !== null && a.temperature !== undefined,
             extras: {
@@ -247,8 +245,6 @@ export class HomeAssistantProvider {
         }
         if (id === 'swing_horizontal_mode')
             return this._service('set_swing_horizontal_mode', {swing_horizontal_mode: value});
-        if (id === 'humidity')
-            return this._service('set_humidity', {humidity: value});
-        return Promise.reject(new ProviderError(N_('Not supported')));
+        return this._service('set_humidity', {humidity: value});
     }
 }

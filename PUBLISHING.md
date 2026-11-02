@@ -13,7 +13,7 @@ Regras oficiais: <https://gjs.guide/extensions/review-guidelines/review-guidelin
 - [x] Não importa os módulos obsoletos `Lang`, `Mainloop` ou `ByteArray`.
 - [x] Sem log excessivo, sem telemetria, sem binários e sem código minificado.
 - [x] O esquema GSettings fica em `org.gnome.shell.extensions.brisa`, no caminho `/org/gnome/shell/extensions/brisa/`.
-- [x] `metadata.json`: `uuid` com o formato `nome@namespace`, `url` do GitHub e `shell-version` só com versões estáveis (47 a 50). Também não tem `session-modes`, porque usa só o modo `user`.
+- [x] `metadata.json`: `uuid` com o formato `nome@namespace`, `url` do GitHub e `shell-version` só com versões estáveis (47 a 51). Também não tem `session-modes`, porque usa só o modo `user`.
 - [x] Licença GPL-3.0-or-later.
 - [x] **Marcas**: o nome é neutro ("Brisa"). "LG ThinQ" e "Home Assistant" aparecem só para dizer com o que é compatível (uso nominativo), sem logos de terceiros. Se o revisor pedir, tire as marcas da descrição e deixe "nuvem do fabricante / Home Assistant".
 - [x] **Código gerado com IA**: a regra pede que você entenda e consiga explicar o código. Leia os arquivos antes de enviar e esteja pronto para responder perguntas do revisor.

@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // SPDX-FileCopyrightText: 2026 Luiz Eduardo Ciarallo
 
+// Generated with AI for personal use.
+// Do NOT upload to extensions.gnome.org (EGO) unless you understand JavaScript
+// and can maintain this code.
+
 import Adw from 'gi://Adw';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
@@ -30,7 +34,6 @@ export default class BrisaPreferences extends ExtensionPreferences {
         window.set_default_size(620, 760);
         window.search_enabled = false;
 
-        // ---- Connection page ------------------------------------------------
         const page = new Adw.PreferencesPage({title: _('Connection'), icon_name: 'network-wireless-symbolic'});
         window.add(page);
 
@@ -46,7 +49,6 @@ export default class BrisaPreferences extends ExtensionPreferences {
         });
         sourceGroup.add(providerRow);
 
-        // LG ThinQ
         const thinqGroup = new Adw.PreferencesGroup({
             title: _('LG ThinQ'),
             description: _('Create a Personal Access Token with the same account used in the ThinQ app, allowing it to list devices, read their status and control them.'),
@@ -54,7 +56,7 @@ export default class BrisaPreferences extends ExtensionPreferences {
         page.add(thinqGroup);
         const patRow = new Adw.ActionRow({title: _('Create a token on the LG ThinQ website'), activatable: true});
         patRow.add_suffix(new Gtk.Image({icon_name: 'adw-external-link-symbolic'}));
-        patRow.connect('activated', () => Gtk.show_uri(window, THINQ_PAT_URL, 0));
+        patRow.connect('activated', () => new Gtk.UriLauncher({uri: THINQ_PAT_URL}).launch(window, null, null));
         thinqGroup.add(patRow);
         const countryRow = new Adw.EntryRow({title: _('Account country (two letters, e.g. BR)'), show_apply_button: true});
         countryRow.text = settings.get_string('thinq-country');
@@ -71,7 +73,6 @@ export default class BrisaPreferences extends ExtensionPreferences {
         });
         thinqGroup.add(countryRow);
 
-        // Home Assistant
         const haGroup = new Adw.PreferencesGroup({
             title: _('Home Assistant'),
             description: _('Any climate entity works. Create a long-lived access token in your Home Assistant profile, under Security.'),
@@ -79,7 +80,7 @@ export default class BrisaPreferences extends ExtensionPreferences {
         page.add(haGroup);
         const haDocsRow = new Adw.ActionRow({title: _('How to create a long-lived token'), activatable: true});
         haDocsRow.add_suffix(new Gtk.Image({icon_name: 'adw-external-link-symbolic'}));
-        haDocsRow.connect('activated', () => Gtk.show_uri(window, HA_TOKEN_DOCS, 0));
+        haDocsRow.connect('activated', () => new Gtk.UriLauncher({uri: HA_TOKEN_DOCS}).launch(window, null, null));
         haGroup.add(haDocsRow);
         const urlRow = new Adw.EntryRow({title: _('Server address, e.g. homeassistant.local:8123 with https'), show_apply_button: true});
         urlRow.text = settings.get_string('ha-url');
@@ -112,7 +113,6 @@ export default class BrisaPreferences extends ExtensionPreferences {
         haGroup.add(insecureRow);
         syncInsecure();
 
-        // Token (shared, stored in the keyring)
         const tokenGroup = new Adw.PreferencesGroup({
             title: _('Access token'),
             description: _('The token is stored in the GNOME Keyring, never in plain-text settings.'),
@@ -164,7 +164,6 @@ export default class BrisaPreferences extends ExtensionPreferences {
             refreshTokenStatus();
         });
 
-        // Device picker
         const deviceGroup = new Adw.PreferencesGroup({
             title: _('Air conditioner'),
             description: _('Search the account and pick the unit to control.'),
@@ -186,6 +185,20 @@ export default class BrisaPreferences extends ExtensionPreferences {
         syncCurrent();
         let found = [];
 
+        // Opens a short-lived connection with the saved token, runs the task
+        // and always closes it again.
+        const withProvider = async task => {
+            const token = await lookupToken(providerId());
+            if (!token)
+                throw new Error(_('Save an access token first'));
+            const provider = createProvider(settings, token);
+            try {
+                return await task(provider);
+            } finally {
+                provider.destroy();
+            }
+        };
+
         searchButton.connect('clicked', async () => {
             found.forEach(r => deviceGroup.remove(r));
             found = [];
@@ -194,13 +207,8 @@ export default class BrisaPreferences extends ExtensionPreferences {
                 found.push(row);
             };
             searchButton.sensitive = false;
-            let provider = null;
             try {
-                const token = await lookupToken(providerId());
-                if (!token)
-                    throw new Error(_('Save an access token first'));
-                provider = createProvider(settings, token);
-                const devices = await provider.listDevices();
+                const devices = await withProvider(provider => provider.listDevices());
                 if (!devices.length)
                     addRow(new Adw.ActionRow({title: _('No air conditioner found in this account')}));
                 for (const d of devices) {
@@ -226,7 +234,6 @@ export default class BrisaPreferences extends ExtensionPreferences {
                 row.add_prefix(new Gtk.Image({icon_name: 'dialog-error-symbolic'}));
                 addRow(row);
             } finally {
-                provider?.destroy();
                 searchButton.sensitive = true;
             }
         });
@@ -261,18 +268,13 @@ export default class BrisaPreferences extends ExtensionPreferences {
                 detectedRows.push(row);
             };
             detectButton.sensitive = false;
-            let provider = null;
             try {
-                const token = await lookupToken(providerId());
-                if (!token)
-                    throw new Error(_('Save an access token first'));
-                provider = createProvider(settings, token);
-                let id = settings.get_string('device-id');
-                if (!id)
-                    id = (await provider.listDevices())[0]?.id;
-                if (!id)
-                    throw new Error(_('No air conditioner found in this account'));
-                const caps = await provider.open(id);
+                const caps = await withProvider(async provider => {
+                    const id = settings.get_string('device-id') || (await provider.listDevices())[0]?.id;
+                    if (!id)
+                        throw new Error(_('No air conditioner found in this account'));
+                    return provider.open(id);
+                });
                 if (caps.modes.length)
                     addRow(_('Modes'), list(caps.modes), 'weather-few-clouds-symbolic');
                 if (caps.temperature) {
@@ -296,7 +298,6 @@ export default class BrisaPreferences extends ExtensionPreferences {
             } catch (e) {
                 addRow(_('Connection failed'), _(e.message), 'dialog-error-symbolic');
             } finally {
-                provider?.destroy();
                 detectButton.sensitive = true;
             }
         });
@@ -329,7 +330,6 @@ export default class BrisaPreferences extends ExtensionPreferences {
                 detectButton.emit('clicked');
         }).catch(() => {});
 
-        // ---- Behaviour page -------------------------------------------------
         const behaviour = new Adw.PreferencesPage({title: _('Behavior'), icon_name: 'preferences-system-symbolic'});
         window.add(behaviour);
         const look = new Adw.PreferencesGroup({title: _('Appearance')});
@@ -366,7 +366,7 @@ export default class BrisaPreferences extends ExtensionPreferences {
         behaviour.add(privacy);
         const repoRow = new Adw.ActionRow({title: _('Project page and source code'), activatable: true});
         repoRow.add_suffix(new Gtk.Image({icon_name: 'adw-external-link-symbolic'}));
-        repoRow.connect('activated', () => Gtk.show_uri(window, this.metadata.url, 0));
+        repoRow.connect('activated', () => new Gtk.UriLauncher({uri: this.metadata.url}).launch(window, null, null));
         privacy.add(repoRow);
     }
 }

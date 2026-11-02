@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // SPDX-FileCopyrightText: 2026 Luiz Eduardo Ciarallo
 
+// Generated with AI for personal use.
+// Do NOT upload to extensions.gnome.org (EGO) unless you understand JavaScript
+// and can maintain this code.
+
 import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import St from 'gi://St';
@@ -9,16 +13,6 @@ import Clutter from 'gi://Clutter';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 const COMMIT_DELAY_MS = 700;
-
-// Rows that are only containers for their own buttons. GNOME treats a
-// non-activatable row as insensitive and greys it out, so these rows report
-// themselves sensitive and simply never highlight or take focus.
-function keepReadable(item) {
-    item.remove_style_class_name('popup-inactive-menu-item');
-    item.track_hover = false;
-    item.can_focus = false;
-}
-
 
 function iconButton(iconName, accessibleName, cb) {
     const btn = new St.Button({
@@ -31,24 +25,43 @@ function iconButton(iconName, accessibleName, cb) {
     return btn;
 }
 
+// Row that is only a container for its own buttons. GNOME treats a
+// non-activatable row as insensitive and greys it out, so it reports itself
+// sensitive and simply never highlights or takes focus.
+export const ContainerItem = GObject.registerClass(
+class ContainerItem extends PopupMenu.PopupBaseMenuItem {
+    _init(params) {
+        super._init({...params, reactive: false, can_focus: false});
+        this.syncSensitive();
+    }
+
+    getSensitive() {
+        return true;
+    }
+
+    syncSensitive() {
+        const sensitive = super.syncSensitive();
+        this.remove_style_class_name('popup-inactive-menu-item');
+        this.track_hover = false;
+        this.can_focus = false;
+        return sensitive;
+    }
+});
+
 // "Label   [−] value [+]": walks a list of values and only commits once the
 // user stops clicking, so several clicks become a single request.
-export {keepReadable};
-
 export const StepperItem = GObject.registerClass(
-class StepperItem extends PopupMenu.PopupBaseMenuItem {
+class StepperItem extends ContainerItem {
     _init(label, {values, format = String, onCommit, big = false, decrease, increase}) {
-        super._init({reactive: false, can_focus: false, style_class: big ? 'brisa-stepper-big' : 'brisa-stepper'});
-        this.syncSensitive();
+        super._init({style_class: big ? 'brisa-stepper-big' : 'brisa-stepper'});
         this._values = values;
         this._format = format;
         this._onCommit = onCommit;
         this._index = -1;
         this._timeoutId = 0;
 
-        if (label) {
+        if (label)
             this.add_child(new St.Label({text: label, x_expand: true, y_align: Clutter.ActorAlign.CENTER}));
-        }
         const box = new St.BoxLayout({
             x_expand: !label,
             x_align: label ? Clutter.ActorAlign.END : Clutter.ActorAlign.CENTER,
@@ -71,20 +84,6 @@ class StepperItem extends PopupMenu.PopupBaseMenuItem {
                 GLib.source_remove(this._timeoutId);
             this._timeoutId = 0;
         });
-    }
-
-    getSensitive() {
-        return true;
-    }
-
-    syncSensitive() {
-        const sensitive = super.syncSensitive();
-        keepReadable(this);
-        return sensitive;
-    }
-
-    setValues(values) {
-        this._values = values;
     }
 
     // The row itself is never reactive (only its buttons are), so the base
@@ -127,7 +126,6 @@ class StepperItem extends PopupMenu.PopupBaseMenuItem {
     }
 });
 
-// Submenu with mutually exclusive options; the current one gets a check mark.
 export class ChoiceSubMenu {
     constructor(title, values, label, onSelect) {
         this._title = title;
@@ -190,23 +188,23 @@ class InfoItem extends PopupMenu.PopupBaseMenuItem {
     }
 });
 
-// Row of round mode buttons (icon + caption).
 export const ModeChips = GObject.registerClass(
-class ModeChips extends PopupMenu.PopupBaseMenuItem {
+class ModeChips extends ContainerItem {
     _init(modes, {label, icon, onSelect}) {
-        super._init({reactive: false, can_focus: false, style_class: 'brisa-chips-item'});
-        this.syncSensitive();
+        super._init({style_class: 'brisa-chips-item'});
         const box = new St.BoxLayout({x_expand: true, style_class: 'brisa-chips'});
         this._buttons = new Map();
         for (const mode of modes) {
-            const content = new St.BoxLayout({vertical: true, x_align: Clutter.ActorAlign.CENTER});
+            const content = new St.Widget({
+                layout_manager: new Clutter.BoxLayout({orientation: Clutter.Orientation.VERTICAL}),
+                x_align: Clutter.ActorAlign.CENTER,
+            });
             content.add_child(new St.Icon({icon_name: icon(mode), icon_size: 18, x_align: Clutter.ActorAlign.CENTER}));
             content.add_child(new St.Label({text: label(mode), style_class: 'brisa-chip-label', x_align: Clutter.ActorAlign.CENTER}));
             const btn = new St.Button({
                 style_class: 'brisa-chip',
                 x_expand: true,
                 can_focus: true,
-                toggle_mode: false,
                 accessible_name: label(mode),
                 child: content,
             });
@@ -217,23 +215,8 @@ class ModeChips extends PopupMenu.PopupBaseMenuItem {
         this.add_child(box);
     }
 
-    getSensitive() {
-        return true;
-    }
-
-    syncSensitive() {
-        const sensitive = super.syncSensitive();
-        keepReadable(this);
-        return sensitive;
-    }
-
     setValue(mode, active) {
-        for (const [m, btn] of this._buttons) {
+        for (const [m, btn] of this._buttons)
             btn.checked = active && m === mode;
-            if (m === mode)
-                btn.add_style_pseudo_class('current');
-            else
-                btn.remove_style_pseudo_class('current');
-        }
     }
 });

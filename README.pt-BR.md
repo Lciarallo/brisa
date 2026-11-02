@@ -64,7 +64,7 @@ cd brisa
 make install
 ```
 
-Saia da sessão e entre de novo (Wayland), depois ative **Brisa** em *Extensões*. Requer GNOME 47 a 50.
+Saia da sessão e entre de novo (Wayland), depois ative **Brisa** em *Extensões*. Requer GNOME 47 a 51.
 
 ## Configuração
 

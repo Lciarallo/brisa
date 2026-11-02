@@ -12,7 +12,7 @@ Thanks for helping! Pull requests are welcome, from typo fixes to new providers.
 
 ## Development setup
 
-You need GNOME 47–50 (Shell 47 or later), `make`, `glib-compile-schemas` and `gettext`.
+You need GNOME 47–51 (Shell 47 or later), `make`, `glib-compile-schemas` and `gettext`.
 
 ```bash
 git clone https://github.com/<you>/brisa.git

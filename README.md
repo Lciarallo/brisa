@@ -54,7 +54,7 @@ cd brisa
 make install
 ```
 
-Log out and back in (Wayland), then enable **Brisa** in *Extensions*. Requires GNOME 47–50.
+Log out and back in (Wayland), then enable **Brisa** in *Extensions*. Requires GNOME 47–51.
 
 ## Set up
 
@@ -100,7 +100,7 @@ make pot        # refresh po/*.pot and merge translations
 make pack       # build dist/brisa@lciarallo.github.io.shell-extension.zip
 ```
 
-Layout: `providers/` (LG ThinQ, Home Assistant), `lib/` (HTTP and keyring), `ui/` (menu widgets and the animation), `po/` (translations), `docs/` (website).
+Layout: `providers/` (LG ThinQ, Home Assistant), `lib/` (HTTP and keyring), `ui/` (Quick Settings toggle and indicator, menu widgets, animation), `po/` (translations), `docs/` (website).
 
 To add a provider, implement `listDevices`, `open` (returns capabilities), `getState` and the `set*` methods, then register it in `providers/index.js`.
 

@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // SPDX-FileCopyrightText: 2026 Luiz Eduardo Ciarallo
 
+// Generated with AI for personal use.
+// Do NOT upload to extensions.gnome.org (EGO) unless you understand JavaScript
+// and can maintain this code.
+
 // LG ThinQ Connect (official LG cloud API, personal access token).
 //
 // Endpoints, headers and payload shapes follow LG's own Apache-2.0 client
@@ -9,6 +13,7 @@
 import GLib from 'gi://GLib';
 
 import {JsonSession, HttpError} from '../lib/http.js';
+import {stepValues} from '../lib/labels.js';
 
 const N_ = s => s;
 
@@ -83,13 +88,8 @@ function writableValues(prop) {
     const w = prop?.value?.w;
     if (Array.isArray(w))
         return w.filter(isScalar).slice(0, MAX_VALUES);
-    if (w && typeof w === 'object' && Number.isFinite(w.max)) {
-        const step = w.step > 0 ? w.step : 1;
-        const values = [];
-        for (let v = w.min ?? 0; v <= w.max + 1e-9 && values.length < MAX_VALUES; v += step)
-            values.push(Math.round(v * 10) / 10);
-        return values;
-    }
+    if (w && typeof w === 'object' && Number.isFinite(w.max))
+        return stepValues(w.min ?? 0, w.max, w.step > 0 ? w.step : 1, MAX_VALUES);
     return prop?.type === 'boolean' ? [true, false] : [];
 }
 
@@ -144,7 +144,7 @@ const SKIP_RESOURCES = new Set(['temperature', 'temperatureInUnits', 'twoSetTemp
 const prettyKey = key => key.replace(/([A-Z])/g, ' $1').replace(/^./, c => c.toUpperCase());
 
 export class ThinQProvider {
-    static id = 'thinq';
+    capsVersion = 0;
 
     constructor({token, country, clientId}) {
         if (!isValidCountry(country))
@@ -280,7 +280,6 @@ export class ThinQProvider {
             v => ({timer: {[hk]: v < 0 ? -1 : Math.floor(v / 60), [mk]: v < 0 ? -1 : v % 60}}));
         }
 
-        // Everything else the profile declares.
         for (const [res, props] of Object.entries(p)) {
             if (SKIP_RESOURCES.has(res) || !props || typeof props !== 'object' || Array.isArray(props))
                 continue;
@@ -338,10 +337,7 @@ export class ThinQProvider {
             current: t.currentTemperature ?? null,
             humidity: raw?.airQualitySensor?.humidity ?? null,
             fan: raw?.airFlow?.[this._fanKey] ?? null,
-            swing: null,
-            preset: null,
             oscillating: !!(dir.rotateUpDown || dir.rotateLeftRight || dir.swirlWind),
-            action: null,
             setpoint: !!this._targetKey(mode),
             extras,
         };
@@ -371,9 +367,6 @@ export class ThinQProvider {
     }
 
     setExtra(id, value) {
-        const extra = this._extras.get(id);
-        if (!extra?.write)
-            return Promise.reject(new ProviderError(N_('Not supported')));
-        return this._control(extra.write(value));
+        return this._control(this._extras.get(id).write(value));
     }
 }

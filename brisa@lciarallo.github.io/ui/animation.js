@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // SPDX-FileCopyrightText: 2026 Luiz Eduardo Ciarallo
 
+// Generated with AI for personal use.
+// Do NOT upload to extensions.gnome.org (EGO) unless you understand JavaScript
+// and can maintain this code.
+
 // Live drawing of the indoor unit: airflow colour follows the mode, speed
 // follows the fan setting, the vanes sweep while swing is on, and the flow
 // fades when the unit is idle or off. It only animates while the menu is open.
@@ -10,9 +14,7 @@ import GObject from 'gi://GObject';
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 
-import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
-
-import {keepReadable} from './widgets.js';
+import {ContainerItem} from './widgets.js';
 import {formatNumber} from '../lib/labels.js';
 
 const COLORS = {
@@ -54,11 +56,13 @@ const jitter = i => {
 };
 
 export const AcAnimation = GObject.registerClass(
-class AcAnimation extends PopupMenu.PopupBaseMenuItem {
+class AcAnimation extends ContainerItem {
     _init() {
-        super._init({reactive: false, can_focus: false, style_class: 'brisa-animation-item'});
-        this.syncSensitive();
-        const box = new St.BoxLayout({vertical: true, x_expand: true});
+        super._init({style_class: 'brisa-animation-item'});
+        const box = new St.Widget({
+            layout_manager: new Clutter.BoxLayout({orientation: Clutter.Orientation.VERTICAL}),
+            x_expand: true,
+        });
         this._area = new St.DrawingArea({x_expand: true, style_class: 'brisa-animation'});
         this._area.connect('repaint', area => this._repaint(area));
         this._caption = new St.Label({style_class: 'brisa-caption', x_align: Clutter.ActorAlign.CENTER});
@@ -67,7 +71,6 @@ class AcAnimation extends PopupMenu.PopupBaseMenuItem {
         this.add_child(box);
 
         this._state = null;
-        this._unit = '°C';
         this._timeline = new Clutter.Timeline({actor: this._area, duration: 1000, repeat_count: -1});
         this._frameId = this._timeline.connect('new-frame', () => this._area.queue_repaint());
         this.connect('destroy', () => {
@@ -77,19 +80,8 @@ class AcAnimation extends PopupMenu.PopupBaseMenuItem {
         });
     }
 
-    getSensitive() {
-        return true;
-    }
-
-    syncSensitive() {
-        const sensitive = super.syncSensitive();
-        keepReadable(this);
-        return sensitive;
-    }
-
-    setState(state, unit, caption) {
+    setState(state, caption) {
         this._state = state;
-        this._unit = unit;
         this._caption.text = caption;
         this._syncRunning();
         this._area.queue_repaint();
@@ -113,7 +105,7 @@ class AcAnimation extends PopupMenu.PopupBaseMenuItem {
         const cr = area.get_context();
         const [w, h] = area.get_surface_size();
         const fg = area.get_theme_node().get_foreground_color();
-        const [fr, fgc, fb] = fg ? [fg.red / 255, fg.green / 255, fg.blue / 255] : [1, 1, 1];
+        const [fr, fgc, fb] = [fg.red / 255, fg.green / 255, fg.blue / 255];
         const s = this._state;
         const on = !!s?.power;
         const t = GLib.get_monotonic_time() / 1e6;
